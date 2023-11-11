@@ -1,6 +1,6 @@
 import './Hero.css'
 import hand_icon from "../assets/hand-icon.png"
-import hero_img from "../assets/latest-collection.png"
+import hero_img from "../assets/img.png"
 import arrow_icon from "../assets/arrow-icon.png"
 
 export const Hero = () => {
