@@ -17,7 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Shop />} />
           <Route
-            path="/men"
+            path="/social"
             element={
               <div>
                 {" "}
@@ -27,7 +27,7 @@ function App() {
             }
           />
           <Route
-            path="/women"
+            path="/sensory"
             element={
               <div>
                 {" "}

@@ -1,5 +1,5 @@
 import "./Navbar.css";
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/forth.png";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { ShopContext } from "../../Context/ShopContext";
 
 export const Navbar = () => {
-  const [menu, setMenu] = useState("shop");
+  const [menu, setMenu] = useState("Home");
   const { getTotalCartItems } = useContext(ShopContext);
 
   return (
@@ -19,20 +19,20 @@ export const Navbar = () => {
       <ul className="nav-menu">
         <li
           onClick={() => {
-            setMenu("shop");
+            setMenu("Home");
           }}
         >
           <Link style={{ textDecoration: "none" }} to="/">
-            Shop
+            Home
           </Link>
-          {menu === "shop" ? <hr /> : <></>}
+          {menu === "Home" ? <hr /> : <></>}
         </li>
         <li
           onClick={() => {
             setMenu("social skill");
           }}
         >
-          <Link style={{ textDecoration: "none" }} to="/men">
+          <Link style={{ textDecoration: "none" }} to="/social">
             Social skill
           </Link>
           {menu === "social skill" ? <hr /> : <></>}
@@ -42,7 +42,7 @@ export const Navbar = () => {
             setMenu("sensory");
           }}
         >
-          <Link style={{ textDecoration: "none" }} to="/women">
+          <Link style={{ textDecoration: "none" }} to="/sensory">
             Sensory
           </Link>
           {menu === "sensory" ? <hr /> : <></>}
@@ -56,7 +56,7 @@ export const Navbar = () => {
 
         <Link to="/cart">
           {" "}
-          <FontAwesomeIcon className="logo" icon={faCartShopping} />
+          <FontAwesomeIcon className="cart" icon={faCartShopping} />
         </Link>
 
         <div className="nav-cart-count">{getTotalCartItems()}</div>

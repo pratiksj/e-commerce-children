@@ -5,8 +5,13 @@
   padding: 16px;
   box-shadow: 0 1px 3px -2px black;
 }
-.logo {
+.cart {
   height: 40px;
+  width: auto;
+}
+
+.logo {
+  height: 150px;
   width: auto;
 }
 
