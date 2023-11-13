@@ -1,11 +1,14 @@
 import "./ProductDisplay.css";
+import { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 import { faStarHalfStroke } from "@fortawesome/free-regular-svg-icons";
+import { ShopContext } from "../../Context/ShopContext";
 
 export const ProductDisplay = (props) => {
   const { product } = props;
+  const { addToCart } = useContext(ShopContext);
   return (
     <div className="productdisplay">
       <div className="productdisplay-left">
@@ -52,7 +55,13 @@ export const ProductDisplay = (props) => {
             <div>L</div>
           </div>
         </div>
-        <button>Add to CART</button>
+        <button
+          onClick={() => {
+            addToCart(product.id);
+          }}
+        >
+          Add to CART
+        </button>
         <p className="productdisplay-right-category">
           <span>Category :</span>Women,T-shirt
         </p>
