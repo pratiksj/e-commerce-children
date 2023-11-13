@@ -2,10 +2,16 @@ import "./Item.css";
 import { Link } from "react-router-dom";
 
 export const Item = (props) => {
+  console.log(props, "from item");
   return (
     <div className="item">
       <Link to={`/product/${props.id}`}>
-        <img className="image-size" src={props.image} alt="" />
+        <img
+          className="image-size"
+          onClick={window.scrollTo(0, 0)}
+          src={props.image}
+          alt=""
+        />
       </Link>
       <p>{props.name}</p>
       <div className="item-prices">

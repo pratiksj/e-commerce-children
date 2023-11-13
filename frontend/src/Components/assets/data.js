@@ -7,6 +7,7 @@ let data_Product = [
     {
         id: 1,
         name: "Wood Shape sorting cube",
+        category: 'social skill learning',
         image: p3_img,
         new: 300,
         old: 400
@@ -15,6 +16,7 @@ let data_Product = [
     {
         id: 2,
         name: "Pencils Fidgets(set of 4 pencils with fidgets)",
+        category: 'social skill learning',
         image: p2_img,
         new: 300,
         old: 400
@@ -23,6 +25,7 @@ let data_Product = [
     {
         id: 3,
         name: "Color cubes activity set",
+        category: 'social skill learning',
         image: p1_img,
         new: 400,
         old: 500
