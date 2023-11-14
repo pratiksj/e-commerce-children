@@ -8,8 +8,15 @@ import { Cart } from "./Pages/Cart";
 import { LoginSignup } from "./Pages/LoginSignup";
 import { Footer } from "./Components/Footer/Footer";
 import { Banner } from "./Components/Banner/Banner";
+import { getProduct } from "./reducers/productReducer";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProduct());
+  }, []);
   return (
     <div>
       <BrowserRouter>
