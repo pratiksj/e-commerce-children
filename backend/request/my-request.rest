@@ -26,3 +26,14 @@ Content-Type: application/json
    "password":"password"
    
 }
+
+###
+GET http://localhost:3001/api/category
+
+###
+POST http://localhost:3001/api/category
+Content-Type: application/json
+
+{
+   "category_name":"social skill"
+}
