@@ -11,6 +11,14 @@ cloudinary.config({
 });
 
 productRouter.get('/', async (req, res) => {
+    try {
+        const products = await prisma.product.findMany()
+        res.json(products)
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal server error' })
+    }
 
 })
 

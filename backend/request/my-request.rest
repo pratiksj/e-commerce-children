@@ -40,3 +40,6 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3001/api/category/3
+
+###
+GET http://localhost:3001/api/products
