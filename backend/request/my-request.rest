@@ -1,0 +1,16 @@
+GET http://localhost:3001/api/users
+
+
+###
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+   "username":"usha",
+   "name":"usha",
+   "password":"password",
+   "email":"usha@gmail.com",
+   "address":"ekantakuna",
+   "contact":"7878787878"
+   
+}
