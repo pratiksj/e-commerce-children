@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 const userRouter = require('express').Router()
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
@@ -21,11 +22,13 @@ userRouter.get('/', async (req, res) => {
 userRouter.post('/', async (req, res) => {
     const { username, name, password, email, address, contact } = req.body
     try {
+        const saltRounds = 10
+        const passwordHash = await bcrypt.hash(password, saltRounds)
         const newUser = await prisma.user.create({
             data: {
                 username,
                 name,
-                password,
+                password: passwordHash,
                 email,
                 address,
                 contact
@@ -36,6 +39,30 @@ userRouter.post('/', async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: `Internal server Error` })
+    }
+})
+
+userRouter.delete('/:id', async (req, res) => {
+    const userId = parseInt(req.params.id)
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        })
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' })
+        }
+
+        await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        })
+        res.json({ message: 'User deleted successfully' })
+
+    } catch (error) {
+        console.log(error)
     }
 })
 

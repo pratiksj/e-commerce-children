@@ -6,11 +6,13 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-   "username":"usha",
-   "name":"usha",
+   "username":"akxita",
+   "name":"akxita",
    "password":"password",
-   "email":"usha@gmail.com",
+   "email":"axita@gmail.com",
    "address":"ekantakuna",
    "contact":"7878787878"
    
 }
+###
+DELETE http://localhost:3001/api/users/2
