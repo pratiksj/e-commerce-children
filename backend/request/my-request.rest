@@ -37,3 +37,6 @@ Content-Type: application/json
 {
    "category_name":"social skill"
 }
+
+###
+DELETE http://localhost:3001/api/category/3
