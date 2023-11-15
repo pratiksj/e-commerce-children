@@ -14,8 +14,8 @@ export const Item = (props) => {
       </Link>
       <p>{props.name}</p>
       <div className="item-prices">
-        <div className="item-price-new">{props.new}</div>
-        <div className="item-price-old">{props.old}</div>
+        <div className="item-price-new">Rs {props.price}</div>
+        {/* <div className="item-price-old">{props.old}</div> */}
       </div>
     </div>
   );
