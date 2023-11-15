@@ -17,6 +17,7 @@ model User {
   email String
   address String
   contact String
+  comments Comment[]
 }
 
 
@@ -28,6 +29,7 @@ model Product{
   category   Category @relation(fields:[category_id],references:[category_id])
   category_id  Int
   image   String
+  comments  Comment[]
 }
 
 
@@ -35,4 +37,14 @@ model Category{
   category_id   Int @id @default(autoincrement())
   category_name   String
   products   Product[]
+}
+
+model Comment{
+  comment_id      Int @id @default(autoincrement())
+  user        User @relation(fields: [user_id], references: [id])
+  user_id  Int
+  product  Product  @relation(fields: [product_id], references: [product_id])
+  product_id   Int
+  comment_text   String
+  timestamp    DateTime @default(now())
 }
