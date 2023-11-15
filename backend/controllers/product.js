@@ -12,7 +12,11 @@ cloudinary.config({
 
 productRouter.get('/', async (req, res) => {
     try {
-        const products = await prisma.product.findMany()
+        const products = await prisma.product.findMany({
+            include: {
+                category: true
+            }
+        })
         res.json(products)
     }
     catch (error) {

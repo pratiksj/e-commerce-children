@@ -23,7 +23,7 @@ export default productSlice.reducer
 export const getProduct = () => {
     return async dispatch => {
         const product = await productService.getAll()
-        console.log(product, 'from reducers')
+
         dispatch(setProduct(product))
     }
 }
