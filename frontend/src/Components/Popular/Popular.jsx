@@ -20,7 +20,7 @@ export const Popular = () => {
           return (
             <Item
               key={i}
-              id={item.id}
+              id={item.product_id}
               name={item.name}
               image={item.image}
               price={item.price}

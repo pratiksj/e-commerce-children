@@ -34,8 +34,10 @@ export const ProductDisplay = (props) => {
           <p>(122)</p>
         </div>
         <div className="productdisplay-right-prices">
-          <div className="productdisplay-right-price-old">Rs{product.old}</div>
-          <div className="productdisplay-right-price-new">Rs{product.new}</div>
+          {/* <div className="productdisplay-right-price-old">Rs{product.price}</div> */}
+          <div className="productdisplay-right-price-new">
+            Rs{product.price}
+          </div>
         </div>
         <div className="productdisplay-right-description">
           Autism-Products.com proudly introduces the Pencil Fidgets (Set of 4
@@ -63,7 +65,8 @@ export const ProductDisplay = (props) => {
           Add to CART
         </button>
         <p className="productdisplay-right-category">
-          <span>Category :</span>Women,T-shirt
+          <span>Category :</span>
+          {product.category.category_name}
         </p>
         <p className="productdisplay-right-category">
           <span>Tags :</span>Modern,latest
