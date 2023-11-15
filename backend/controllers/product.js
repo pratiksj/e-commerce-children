@@ -14,7 +14,12 @@ productRouter.get('/', async (req, res) => {
     try {
         const products = await prisma.product.findMany({
             include: {
-                category: true
+                category: true,
+                comments: {
+                    select: {
+                        comment_text: true
+                    }
+                }
             }
         })
         res.json(products)
@@ -57,6 +62,37 @@ productRouter.post('/', async (req, res) => {
 
     })
 
+})
+
+productRouter.post('/comment', async (req, res) => {
+
+    try {
+        const { user_id, product_id, comment_text } = req.body
+        const user = await prisma.user.findUnique({
+            where: {
+                id: user_id
+            }
+        })
+        const product = await prisma.product.findUnique({
+            where: {
+                product_id: product_id
+            }
+        })
+        if (!user || !product) {
+            res.status(404).json({ error: 'User or Product not found' })
+        }
+        const newComment = await prisma.comment.create({
+            data: {
+                user_id,
+                product_id,
+                comment_text
+            }
+        })
+        res.status(201).json(newComment)
+
+    } catch (error) {
+        res.status(500).json({ error: "Error in Internal server" })
+    }
 })
 
 module.exports = productRouter

@@ -43,3 +43,14 @@ DELETE http://localhost:3001/api/category/3
 
 ###
 GET http://localhost:3001/api/products
+
+###
+POST http://localhost:3001/api/products/comment
+Content-Type: application/json
+
+{
+   "user_id":3,
+   "product_id":1,
+   "comment_text":"this product is really nice"
+
+}

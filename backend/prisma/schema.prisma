@@ -18,6 +18,7 @@ model User {
   address String
   contact String
   comments Comment[]
+  cartItems CartItem[]
 }
 
 
@@ -30,6 +31,7 @@ model Product{
   category_id  Int
   image   String
   comments  Comment[]
+  cartItems CartItem[]
 }
 
 
@@ -48,3 +50,16 @@ model Comment{
   comment_text   String
   timestamp    DateTime @default(now())
 }
+
+model CartItem{
+id   Int @id @default(autoincrement())
+user  User @relation(fields: [user_id], references: [id])
+user_id  Int
+product  Product  @relation(fields: [product_id], references: [product_id])
+product_id   Int
+quantity   Int
+price Int
+timestamp  DateTime @default(now())
+
+}
+
