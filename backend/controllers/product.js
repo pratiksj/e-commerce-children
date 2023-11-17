@@ -95,4 +95,9 @@ productRouter.post('/comment', async (req, res) => {
     }
 })
 
+productRouter.post('/cart', async (req, res) => {
+
+
+})
+
 module.exports = productRouter

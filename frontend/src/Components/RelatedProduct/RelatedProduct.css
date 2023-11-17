@@ -2,8 +2,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* justify-content: center; */
   gap: 10px;
-  height: 90vh;
+  /* height: 90vh; */
+  border: 3px solid brown;
 }
 
 .relatedproducts h1 {
@@ -22,5 +24,8 @@
 .relatedproducts-item {
   margin-top: 50px;
   display: flex;
-  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: wrap;
 }

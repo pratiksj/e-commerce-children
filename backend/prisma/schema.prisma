@@ -11,14 +11,15 @@ datasource db {
 
 model User {
   id      Int      @id @default(autoincrement())
-  username   String   @unique
+  username   String?   @unique
   name    String
-  password String
+  password String?
   email String
-  address String
-  contact String
+  address String?
+  contact String?
   comments Comment[]
   cartItems CartItem[]
+  sessions Session[]
 }
 
 
@@ -60,6 +61,13 @@ product_id   Int
 quantity   Int
 price Int
 timestamp  DateTime @default(now())
+
+}
+
+model Session{
+  id   Int @id @default(autoincrement())
+  user  User @relation(fields: [user_id], references: [id])
+  user_id Int
 
 }
 

@@ -1,14 +1,14 @@
 const bcrypt = require('bcryptjs')
-const userRouter = require('express').Router()
+const registerRouter = require('express').Router()
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 
-userRouter.get('/hellow', (req, res) => {
+registerRouter.get('/hellow', (req, res) => {
     res.send('<h1>Hellow World</h1>')
 })
 
-userRouter.get('/', async (req, res) => {
+registerRouter.get('/', async (req, res) => {
     try {
         const users = await prisma.user.findMany()
         res.json(users)
@@ -19,7 +19,7 @@ userRouter.get('/', async (req, res) => {
 })
 
 
-userRouter.post('/', async (req, res) => {
+registerRouter.post('/', async (req, res) => {
     const { username, name, password, email, address, contact } = req.body
     try {
         const saltRounds = 10
@@ -42,7 +42,7 @@ userRouter.post('/', async (req, res) => {
     }
 })
 
-userRouter.delete('/:id', async (req, res) => {
+registerRouter.delete('/:id', async (req, res) => {
     const userId = parseInt(req.params.id)
     try {
         const user = await prisma.user.findUnique({
@@ -66,4 +66,4 @@ userRouter.delete('/:id', async (req, res) => {
     }
 })
 
-module.exports = userRouter
+module.exports = registerRouter

@@ -5,12 +5,13 @@ import { Shop } from "./Pages/Shop";
 import { ShopCategory } from "./Pages/ShopCategory";
 import { Product } from "./Pages/Product";
 import { Cart } from "./Pages/Cart";
-import { LoginSignup } from "./Pages/LoginSignup";
 import { Footer } from "./Components/Footer/Footer";
 import { Banner } from "./Components/Banner/Banner";
 import { getProduct } from "./reducers/productReducer";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { SignIn } from "./Pages/signin";
+import { Signup } from "./Pages/Signup";
 
 function App() {
   const dispatch = useDispatch();
@@ -48,7 +49,8 @@ function App() {
         {/* <Route path='/product' element={<Product/>}/>
      <Route path=':productId' element={<Product/>}/> */}
         <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<LoginSignup />} />
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/register" element={<Signup />} />
       </Routes>
       <Footer />
     </div>

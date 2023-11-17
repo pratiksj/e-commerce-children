@@ -1,8 +1,8 @@
-GET http://localhost:3001/api/users
+GET http://localhost:3001/api/manual-register
 
 
 ###
-POST http://localhost:3001/api/users
+POST http://localhost:3001//api/manual-register
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
    
 }
 ###
-DELETE http://localhost:3001/api/users/2
+DELETE http://localhost:3001/api/manual-register/9
 
 ###
 POST http://localhost:3001/api/login
@@ -54,3 +54,10 @@ Content-Type: application/json
    "comment_text":"this product is really nice"
 
 }
+
+###
+GET http://localhost:3001/api/sessions
+
+
+###
+DELETE http://localhost:3001/api/sessions/2

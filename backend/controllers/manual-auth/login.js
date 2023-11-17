@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const { SECRET } = require('../utils/config')
+const { SECRET } = require('../../utils/config')
 const loginRouter = require('express').Router()
 const { PrismaClient, Prisma } = require('@prisma/client')
 const prisma = new PrismaClient()
@@ -29,4 +29,9 @@ loginRouter.post('/', async (req, res) => {
     res.status(200).send({ token, username: user.username, name: user.name })
 })
 
+
+loginRouter.get('/')
+
 module.exports = loginRouter
+
+//http://localhost:3001/api/sessions/oauth/google
