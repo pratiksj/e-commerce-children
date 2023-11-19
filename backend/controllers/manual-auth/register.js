@@ -20,18 +20,18 @@ registerRouter.get('/', async (req, res) => {
 
 
 registerRouter.post('/', async (req, res) => {
-    const { username, name, password, email, address, contact } = req.body
+    const { name, password, email } = req.body
     try {
         const saltRounds = 10
         const passwordHash = await bcrypt.hash(password, saltRounds)
         const newUser = await prisma.user.create({
             data: {
-                username,
+
+                email,
                 name,
                 password: passwordHash,
-                email,
-                address,
-                contact
+
+
 
             }
         })

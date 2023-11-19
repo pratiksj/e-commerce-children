@@ -13,4 +13,17 @@ const createSession = async (userId) => {
     return session
 }
 
-module.exports = createSession
+const findSession = async (query) => {
+    const { userId, valid } = query
+    console.log(userId, 'userid')
+
+    const user = await prisma.session.findMany({
+        where: {
+            user_id: userId
+        }
+    })
+
+    return user
+}
+
+module.exports = { createSession, findSession }

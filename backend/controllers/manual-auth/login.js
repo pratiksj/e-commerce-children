@@ -30,7 +30,7 @@ loginRouter.post('/', async (req, res) => {
 })
 
 
-loginRouter.get('/')
+
 
 module.exports = loginRouter
 

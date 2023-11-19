@@ -2,16 +2,16 @@ GET http://localhost:3001/api/manual-register
 
 
 ###
-POST http://localhost:3001//api/manual-register
+POST http://localhost:3001/api/manual-register
 Content-Type: application/json
 
 {
-   "username":"akxita",
+  
+   
+   "email":"axita12@gmail.com",
    "name":"akxita",
-   "password":"password",
-   "email":"axita@gmail.com",
-   "address":"ekantakuna",
-   "contact":"7878787878"
+   "password":"password"
+   
    
 }
 ###
@@ -61,3 +61,18 @@ GET http://localhost:3001/api/sessions
 
 ###
 DELETE http://localhost:3001/api/sessions/2
+
+
+###
+POST http://localhost:3001/api/session
+Content-Type: application/json
+
+{
+   "email":"axita12@gmail.com",
+   "password":"password"
+
+}
+
+###
+GET http://localhost:3001/api/session
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsImVtYWlsIjoiYXhpdGExMkBnbWFpbC5jb20iLCJuYW1lIjoiYWt4aXRhIiwicGFzc3dvcmQiOiIkMmEkMTAkYmp0b3VkdUtsTk1Sb0Y4REQ5ZGJnLndwRHBWWWxrWml1ZFdocnkzcXova2JmenhISTFYY0MiLCJhZGRyZXNzIjpudWxsLCJjb250YWN0IjpudWxsLCJzZXNzaW9uIjoxMywiaWF0IjoxNzAwMzc1MTQzfQ.8oN5HxGNja3dbA9mCBLiourJw_WGsCzAk1v40uXoCAQ

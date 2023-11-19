@@ -64,7 +64,7 @@ const getGoogleUser = async ({ id_token, access_token }) => {
 }
 
 const findCreateAndUpdateUser = async (userObj) => {
-    console.log(userObj.id, 'ey')
+
     const userExist = await prisma.user.findUnique({
         where: {
             username: userObj.name
@@ -85,44 +85,7 @@ const findCreateAndUpdateUser = async (userObj) => {
     }
 }
 
-sessionRouter.get('/', async (req, res) => {
-    try {
-        const variation = await prisma.session.findMany()
-        res.json(variation)
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: `Internal sever Error` })
-    }
 
-})
-
-
-
-sessionRouter.delete('/:id', async (req, res) => {
-    const categoryId = parseInt(req.params.id)
-    try {
-        const variation = await prisma.session.findUnique({
-            where: {
-                id: categoryId
-            }
-        })
-
-
-        if (!variation) {
-            return res.status(404).json({ error: 'User not found' })
-        }
-
-        await prisma.session.delete({
-            where: {
-                id: categoryId
-            }
-        })
-        res.json({ message: 'User deleted successfully' })
-
-    } catch (error) {
-        console.log(error)
-    }
-})
 
 
 

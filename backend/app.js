@@ -10,6 +10,7 @@ const { keys } = require('./utils/config')
 const passport = require('passport')
 const loginRouter = require('./controllers/manual-auth/login')
 const sessionRouter = require('./controllers/google-auth/googleAuth')
+const userSessionRouter = require('./controllers/session')
 
 app.use(cookieSession(
     {
@@ -36,7 +37,7 @@ app.use('/api/manual-login', loginRouter)
 app.use('/api/products', productRouter)
 app.use('/api/category', categoryRouter)
 app.use('/api/sessions', sessionRouter)
-
+app.use('/api/session', userSessionRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
