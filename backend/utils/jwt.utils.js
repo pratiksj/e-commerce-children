@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('./config')
 
-const signJwt = (object,) => {
-    return jwt.sign(object, SECRET)
+const signJwt = (object, expiresIn) => {
+    return jwt.sign(object, SECRET, { expiresIn })
 }
 
 const verifyJwt = (token) => {
@@ -19,7 +19,8 @@ const verifyJwt = (token) => {
     } catch (error) {
         return {
             valid: false,
-            expired: error.message = 'jwt expired',
+            expired: true,
+
             decoded: null
         }
     }

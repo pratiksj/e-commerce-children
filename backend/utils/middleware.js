@@ -2,6 +2,7 @@ const { verify } = require('jsonwebtoken')
 const logger = require('./logger')
 const { verifyJwt } = require('./jwt.utils')
 const { get } = require('lodash')
+const { reIssueAccessToken } = require('../services/session')
 
 const requestLogger = (request, response, next) => {
     logger.info('Method:', request.method)
@@ -28,12 +29,29 @@ const errorHandler = (error, request, response, next) => {
     next(error)
 }
 
-const deserializeUser = (req, res, next) => {
+const deserializeUser = async (req, res, next) => {
+    console.log(req, 'request')
 
     //get from the lodash is used for safely accessing nested object without throwin error
     const accessToken = get(req, "headers.authorization", "").replace(/^Bearer\s/, "")
-
+    const refreshToken = get(req, "headers.x-refresh");
+    console.log(refreshToken, 'refreshtoken from middle')
     const { decoded, expired } = verifyJwt(accessToken)
+    console.log(expired, 'expired')
+    if (expired && refreshToken) {
+        const newAccessToken = await reIssueAccessToken({ refreshToken })
+        console.log(newAccessToken, 'new excess token')
+        //console.log(newAccessToken, 'newAccessToken')
+        if (newAccessToken) {
+            res.setHeader('x-access-token', newAccessToken)
+        }
+        const result = verifyJwt(newAccessToken)
+
+        res.locals.user = result.decoded
+        return next()
+
+
+    }
 
     if (!decoded) {
 

@@ -2,7 +2,7 @@ const userSessionRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { PrismaClient } = require('@prisma/client')
-const { createSession, findSession } = require('../services/session')
+const { createSession, findSession, updateSession } = require('../services/session')
 const { signJwt } = require('../utils/jwt.utils')
 const { deserializeUser } = require('../utils/middleware')
 
@@ -36,6 +36,8 @@ const validatePassword = async ({
 
 
 
+
+
 userSessionRouter.get('/', deserializeUser, async (req, res) => {
     const userId = res.locals.user.id
 
@@ -56,38 +58,46 @@ userSessionRouter.post('/', async (req, res) => {
     const session = await createSession(user.id)
 
     //create an access token
-    const accessToken = signJwt({ ...user, session: session.id }, { expiresIn: '5m' })
+    const accessToken = signJwt({ ...user, session: session.id }, '1m')
     //create an refresh token
-    const refreshToken = signJwt({ ...user, session: session.id }, { expiresIn: '5m' })
+    const refreshToken = signJwt({ ...user, session: session.id }, '15m')//15min
     return res.send({ accessToken, refreshToken })
 
 })
 
 
-userSessionRouter.delete('/:id', async (req, res) => {
-    const categoryId = parseInt(req.params.id)
-    try {
-        const variation = await prisma.session.findUnique({
-            where: {
-                id: categoryId
-            }
-        })
+userSessionRouter.delete('/', deserializeUser, async (req, res) => {
+
+    const sessionId = res.locals.user.session
+    await updateSession(sessionId, { valid: false })
+
+    return res.send({
+        accessToken: null,
+        refreshToken: null
+
+    })
+    // try {
+    //     const variation = await prisma.session.findUnique({
+    //         where: {
+    //             id: categoryId
+    //         }
+    //     })
 
 
-        if (!variation) {
-            return res.status(404).json({ error: 'User not found' })
-        }
+    //     if (!variation) {
+    //         return res.status(404).json({ error: 'User not found' })
+    //     }
 
-        await prisma.session.delete({
-            where: {
-                id: categoryId
-            }
-        })
-        res.json({ message: 'User deleted successfully' })
+    //     await prisma.session.delete({
+    //         where: {
+    //             id: categoryId
+    //         }
+    //     })
+    //     res.json({ message: 'User deleted successfully' })
 
-    } catch (error) {
-        console.log(error)
-    }
+    // } catch (error) {
+    //     console.log(error)
+    // }
 })
 
 module.exports = userSessionRouter
