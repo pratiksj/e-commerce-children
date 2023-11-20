@@ -27,8 +27,14 @@ const validatePassword = async ({
         : await bcrypt.compare(password, user.password)
 
     //const isValid = await user.comparePassword(password);
+    if (!passwordCorrect) {
+        return res.status(401).json({
+            error: 'invalid username or password'
+        })
+    }
 
-    if (!passwordCorrect) return false;
+
+    //if (!passwordCorrect) return false;
 
     return user;
 }
@@ -58,9 +64,28 @@ userSessionRouter.post('/', async (req, res) => {
     const session = await createSession(user.id)
 
     //create an access token
-    const accessToken = signJwt({ ...user, session: session.id }, '1m')
+    const accessToken = signJwt({ ...user, session: session.id }, '15m')
     //create an refresh token
-    const refreshToken = signJwt({ ...user, session: session.id }, '15m')//15min
+    const refreshToken = signJwt({ ...user, session: session.id }, '30m')//15min
+    //return access and refresh tokens
+    res.cookie('accessToken', accessToken, {
+        maxAge: 900000,//15min
+        httpOnly: true,
+        domain: 'localhost', //for the production,set it in config
+        path: '/',
+        sameSite: 'strict',
+        secure: false,  //for production set to the true
+    })
+
+    res.cookie('refreshToken', refreshToken, {
+        maxAge: 1800000,//30min
+        httpOnly: true,
+        domain: 'localhost', //for the production,set it in config
+        path: '/',
+        sameSite: 'strict',
+        secure: false,  //for production set to the true
+    })
+
     return res.send({ accessToken, refreshToken })
 
 })

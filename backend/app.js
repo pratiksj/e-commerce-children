@@ -5,23 +5,26 @@ const productRouter = require('./controllers/product')
 const categoryRouter = require('./controllers/category')
 const middleware = require('./utils/middleware')
 const fileUpload = require('express-fileupload')
-const cookieSession = require('cookie-session')
-const { keys } = require('./utils/config')
-const passport = require('passport')
+//const cookieSession = require('cookie-session')
+const cookieParser = require('cookie-parser')
+
+//const { keys } = require('./utils/config')
+//const passport = require('passport')
 const loginRouter = require('./controllers/manual-auth/login')
 const sessionRouter = require('./controllers/google-auth/googleAuth')
 const userSessionRouter = require('./controllers/session')
 
-app.use(cookieSession(
-    {
-        name: 'session',
-        keys: [keys],
-        maxAge: 24 * 60 * 60 * 100,
-    }
-))
+// app.use(cookieSession(
+//     {
+//         name: 'session',
+//         keys: [keys],
+//         maxAge: 24 * 60 * 60 * 100,
+//     }
+// ))
 
-app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.initialize())
+// app.use(passport.session())
+app.use(cookieParser())
 
 app.use(fileUpload({
     useTempFiles: true

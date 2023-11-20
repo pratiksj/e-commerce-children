@@ -1,8 +1,33 @@
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
 import getGoogleOAuthUrl from "../services/googleService";
+import { useDispatch } from "react-redux";
+
 import "./CSS/LoginSignup.css";
+import { loginUser } from "../reducers/userReducer";
 
 export const SignIn = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const dispatch = useDispatch();
+  const onSubmit = (data) => {
+    try {
+      dispatch(
+        loginUser({
+          email: data.email,
+          password: data.password,
+        })
+      );
+      reset();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   //   const navigation = useNavigation();
   //   const signupNavigator = () => {
   //     navigation("/register");
@@ -11,16 +36,30 @@ export const SignIn = () => {
     <div className="loginsignup">
       <div className="loginsignup-container">
         <h1>Sign In</h1>
-        <div className="loginsignup-fields">
-          <input type="email" placeholder="Email Address" />
-          <input type="password" placeholder="Password" />
-        </div>
-        <button className="btn">Login</button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="loginsignup-fields">
+            <input
+              type="email"
+              placeholder="Email address"
+              {...register("email", { required: true })}
+            />
+            {errors.email && <span>Email is required</span>}
+            <input
+              type="password"
+              placeholder="password"
+              {...register("password", { required: true })}
+            />
+            {errors.email && <span>Email is required</span>}
+          </div>
+          <button type="submit" className="btn">
+            Login
+          </button>
+        </form>
         <button className="google-api" onClick={getGoogleOAuthUrl()}>
           Google
         </button>
         <p className="loginsignup-login">
-          Not registered yet? <Link to="/register">Signup here</Link>
+          {/* Not registered yet? <Link to="/register">Signup here</Link> */}
         </p>
         {/* <p>
           <a href={getGoogleOAuthUrl()}>login with google</a>

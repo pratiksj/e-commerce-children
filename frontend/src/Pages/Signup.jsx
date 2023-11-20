@@ -5,6 +5,7 @@ import getGoogleOAuthUrl from "../services/googleService";
 import "./CSS/LoginSignup.css";
 import { useRef } from "react";
 import { creatUser } from "../reducers/userReducer";
+import { useNavigate } from "react-router-dom";
 
 export const Signup = () => {
   const {
@@ -17,10 +18,10 @@ export const Signup = () => {
   const password = useRef({});
   password.current = watch("password", "");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     try {
-      console.log(data, "from onsumbit ");
       dispatch(
         creatUser({
           email: data.email,
@@ -29,6 +30,7 @@ export const Signup = () => {
         })
       );
       reset();
+      navigate("/");
     } catch (error) {
       console.log(error.message);
     }
@@ -42,7 +44,7 @@ export const Signup = () => {
           <div className="loginsignup-fields">
             <input
               type="email"
-              placeholder="Email addess"
+              placeholder="Email address"
               {...register("email", { required: true })}
             />
             {errors.email && <span>Email is required</span>}
