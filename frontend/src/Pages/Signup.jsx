@@ -1,19 +1,82 @@
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import getGoogleOAuthUrl from "../services/googleService";
 import "./CSS/LoginSignup.css";
+import { useRef } from "react";
+import { creatUser } from "../reducers/userReducer";
 
 export const Signup = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const password = useRef({});
+  password.current = watch("password", "");
+  const dispatch = useDispatch();
+
+  const onSubmit = (data) => {
+    try {
+      console.log(data, "from onsumbit ");
+      dispatch(
+        creatUser({
+          email: data.email,
+          name: data.name,
+          password: data.password,
+        })
+      );
+      reset();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="loginsignup">
       <div className="loginsignup-container">
         <h1>Sign Up</h1>
-        <div className="loginsignup-fields">
-          <input type="text" placeholder="Your name" />
-          <input type="email" placeholder="Email Address" />
-          <input type="password" placeholder="Password" />
-        </div>
-        <button className="btn">Continue</button>
-        <button className="google-api" onClick={getGoogleOAuthUrl()}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="loginsignup-fields">
+            <input
+              type="email"
+              placeholder="Email addess"
+              {...register("email", { required: true })}
+            />
+            {errors.email && <span>Email is required</span>}
+            <input
+              type="name"
+              placeholder="Name"
+              {...register("name", { required: true })}
+            />
+            {errors.name && <span>name is required</span>}
+            <input
+              type="password"
+              placeholder="Password"
+              {...register("password", { required: true })}
+            />
+            {errors.password && <span>Password is required</span>}
+
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              {...register("confirmPassword", {
+                required: true,
+                validate: (value) =>
+                  value === password.current || "The passwords do not match",
+              })}
+            />
+            {errors.confirmPassword && (
+              <span>{errors.confirmPassword.message}</span>
+            )}
+          </div>
+          <button type="submit" className="btn">
+            Continue
+          </button>
+        </form>
+        <button className="google-api" onClick={getGoogleOAuthUrl}>
           Google
         </button>
         <p className="loginsignup-login">
