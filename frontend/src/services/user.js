@@ -1,6 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/manual-register'
 const loginBaseUrl = '/api/session'
+const getLoggedUserUrl = '/api/login-user'
 
 const create = async (newuser) => {
     const request = await axios.post(baseUrl, newuser)
@@ -11,4 +12,11 @@ const login = async (credential) => {
     return request.data
 }
 
-export default { create, login }
+const getloggedInUser = async () => {
+    const request = await axios.get(getLoggedUserUrl, {
+        withCredentials: true,
+    })
+    return request.data
+}
+
+export default { create, login, getloggedInUser }

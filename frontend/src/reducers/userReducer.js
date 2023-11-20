@@ -5,7 +5,7 @@ import userService from '../services/user'
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: [],
+    initialState: null,
     reducers: {
         appendUser(state, action) {
             state.push(action.payload)
@@ -31,10 +31,12 @@ export const creatUser = (user) => {
 
 export const loginUser = (credential) => {
     return async (dispatch) => {
-        const loginUser = await userService.login(credential)
-        console.log(loginUser, 'loggeinuser')
-        //dispatch(setUser(user));
+        await userService.login(credential)
+        const loginUser = await userService.getloggedInUser()
+        console.log(loginUser, 'currentUser')
+        dispatch(setUser(loginUser));
     };
 };
+
 
 

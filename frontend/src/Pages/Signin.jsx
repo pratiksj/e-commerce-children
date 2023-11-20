@@ -1,5 +1,6 @@
-//import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 import getGoogleOAuthUrl from "../services/googleService";
 import { useDispatch } from "react-redux";
@@ -15,6 +16,7 @@ export const SignIn = () => {
     formState: { errors },
   } = useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onSubmit = (data) => {
     try {
       dispatch(
@@ -24,6 +26,7 @@ export const SignIn = () => {
         })
       );
       reset();
+      navigate("/");
     } catch (error) {
       console.log(error.message);
     }
@@ -59,7 +62,7 @@ export const SignIn = () => {
           Google
         </button>
         <p className="loginsignup-login">
-          {/* Not registered yet? <Link to="/register">Signup here</Link> */}
+          Not registered yet? <Link to="/register">Signup here</Link>
         </p>
         {/* <p>
           <a href={getGoogleOAuthUrl()}>login with google</a>

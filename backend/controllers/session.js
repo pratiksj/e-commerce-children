@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const { PrismaClient } = require('@prisma/client')
 const { createSession, findSession, updateSession } = require('../services/session')
 const { signJwt } = require('../utils/jwt.utils')
-const { deserializeUser } = require('../utils/middleware')
+const { deserializeUser, requireUser } = require('../utils/middleware')
 
 const prisma = new PrismaClient()
 
@@ -44,7 +44,7 @@ const validatePassword = async ({
 
 
 
-userSessionRouter.get('/', deserializeUser, async (req, res) => {
+userSessionRouter.get('/', deserializeUser, requireUser, async (req, res) => {
     const userId = res.locals.user.id
 
 
@@ -70,7 +70,7 @@ userSessionRouter.post('/', async (req, res) => {
     //return access and refresh tokens
     res.cookie('accessToken', accessToken, {
         maxAge: 900000,//15min
-        httpOnly: true,
+        httpOnly: false,
         domain: 'localhost', //for the production,set it in config
         path: '/',
         sameSite: 'strict',
@@ -79,7 +79,7 @@ userSessionRouter.post('/', async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
         maxAge: 1800000,//30min
-        httpOnly: true,
+        httpOnly: false,
         domain: 'localhost', //for the production,set it in config
         path: '/',
         sameSite: 'strict',

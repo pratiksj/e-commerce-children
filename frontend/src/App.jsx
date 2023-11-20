@@ -17,6 +17,7 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProduct());
+    //const accessToken = document.cookie; // Access all cookies
   }, []);
   return (
     <div>

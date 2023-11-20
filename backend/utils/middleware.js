@@ -30,6 +30,7 @@ const errorHandler = (error, request, response, next) => {
 }
 
 const deserializeUser = async (req, res, next) => {
+    console.log('hellow i ma here')
 
 
     //get from the lodash is used for safely accessing nested object without throwin error
@@ -70,10 +71,22 @@ const deserializeUser = async (req, res, next) => {
     next()
 }
 
+const requireUser = (req, res, next) => {
+    console.log('from requireUser')
+    const user = res.locals.user;
+
+    if (!user) {
+        return res.status(403).json({ error: 'user not found' });
+    }
+
+    next();
+};
+
 
 module.exports = {
     requestLogger,
     unknownEndpoint,
     errorHandler,
-    deserializeUser
+    deserializeUser,
+    requireUser
 }

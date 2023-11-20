@@ -13,6 +13,8 @@ const cookieParser = require('cookie-parser')
 const loginRouter = require('./controllers/manual-auth/login')
 const sessionRouter = require('./controllers/google-auth/googleAuth')
 const userSessionRouter = require('./controllers/session')
+const userRouter = require('./controllers/user')
+
 
 // app.use(cookieSession(
 //     {
@@ -41,6 +43,7 @@ app.use('/api/products', productRouter)
 app.use('/api/category', categoryRouter)
 app.use('/api/sessions', sessionRouter)
 app.use('/api/session', userSessionRouter)
+app.use('/api/login-user', userRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 

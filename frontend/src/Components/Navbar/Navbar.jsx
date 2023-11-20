@@ -4,12 +4,14 @@ import logo from "../assets/forth.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ShopContext } from "../../Context/ShopContext";
 
 export const Navbar = () => {
   const [menu, setMenu] = useState("Home");
   const { getTotalCartItems } = useContext(ShopContext);
+  const loggedInUser = useSelector((state) => state.user);
 
   return (
     <div className="navbar">
@@ -50,9 +52,13 @@ export const Navbar = () => {
       </ul>
 
       <div className="nav-login-cart">
-        <Link to="/login">
-          <button>login</button>
-        </Link>
+        {loggedInUser ? (
+          <div>welcome, {loggedInUser.name}</div>
+        ) : (
+          <Link to="/login">
+            <button>login</button>
+          </Link>
+        )}
 
         <Link to="/cart">
           {" "}
