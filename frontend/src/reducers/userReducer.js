@@ -30,13 +30,20 @@ export const creatUser = (user) => {
 }
 
 export const loginUser = (credential) => {
-    return async (dispatch) => {
+    return async () => {
         await userService.login(credential)
+
+    };
+};
+
+export const currentUser = () => {
+    return async (dispatch) => {
+        console.log('hellow')
         const loginUser = await userService.getloggedInUser()
         console.log(loginUser, 'currentUser')
         dispatch(setUser(loginUser));
-    };
-};
+    }
+}
 
 
 

@@ -57,8 +57,8 @@ user  User @relation(fields: [user_id], references: [id])
 user_id  Int
 product  Product  @relation(fields: [product_id], references: [product_id])
 product_id   Int
-quantity   Int
-price Int
+quantity   Int? @default(0)
+price Int? @default(0)
 timestamp  DateTime @default(now())
 
 }

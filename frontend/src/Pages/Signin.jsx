@@ -6,7 +6,7 @@ import getGoogleOAuthUrl from "../services/googleService";
 import { useDispatch } from "react-redux";
 
 import "./CSS/LoginSignup.css";
-import { loginUser } from "../reducers/userReducer";
+import { loginUser, currentUser } from "../reducers/userReducer";
 
 export const SignIn = () => {
   const {
@@ -25,6 +25,7 @@ export const SignIn = () => {
           password: data.password,
         })
       );
+      dispatch(currentUser());
       reset();
       navigate("/");
     } catch (error) {
@@ -37,10 +38,7 @@ export const SignIn = () => {
     // Redirect to the Google OAuth URL
     window.location.href = googleOAuthUrl;
   };
-  //   const navigation = useNavigation();
-  //   const signupNavigator = () => {
-  //     navigation("/register");
-  //   };
+
   return (
     <div className="loginsignup">
       <div className="loginsignup-container">

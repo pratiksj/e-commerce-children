@@ -35,44 +35,46 @@ const deserializeUser = async (req, res, next) => {
 
     //get from the lodash is used for safely accessing nested object without throwin error
     const accessToken = get(req, "cookies.accessToken") || get(req, "headers.authorization", "").replace(/^Bearer\s/, "")
-    const refreshToken = get(req, "cookies.refreshToken") || get(req, "headers.x-refresh");
+    // const refreshToken = get(req, "cookies.refreshToken") || get(req, "headers.x-refresh");
     console.log(accessToken, 'accessToken')
     const { decoded, expired } = verifyJwt(accessToken)
 
-    if (expired && refreshToken) {
-        const newAccessToken = await reIssueAccessToken({ refreshToken })
+    // if (expired && refreshToken) {
+    //     const newAccessToken = await reIssueAccessToken({ refreshToken })
 
 
-        if (newAccessToken) {
-            res.setHeader('x-access-token', newAccessToken)
-            res.cookie('accessToken', accessToken, {
-                maxAge: 900000,//15min
-                httpOnly: true,
-                domain: 'localhost', //for the production,set it in config
-                path: '/',
-                sameSite: 'strict',
-                secure: false,  //for production set to the true
-            })
+    //     if (newAccessToken) {
+    //         res.setHeader('x-access-token', newAccessToken)
+    //         res.cookie('accessToken', accessToken, {
+    //             maxAge: 900000,//15min
+    //             httpOnly: true,
+    //             domain: 'localhost', //for the production,set it in config
+    //             path: '/',
+    //             sameSite: 'strict',
+    //             secure: false,  //for production set to the true
+    //         })
 
-        }
-        const result = verifyJwt(newAccessToken)
+    //     }
+    //     const result = verifyJwt(newAccessToken)
 
-        res.locals.user = result.decoded
-        return next()
+    //     res.locals.user = result.decoded
+    //     return next()
 
 
-    }
+    // }
 
     if (!decoded) {
 
         return res.status(401).json({ error: 'token invalid' })
+    }
+    if (expired) {
+        return res.status(401).json({ error: 'token expired logged in again' })
     }
     res.locals.user = decoded
     next()
 }
 
 const requireUser = (req, res, next) => {
-    console.log('from requireUser')
     const user = res.locals.user;
 
     if (!user) {

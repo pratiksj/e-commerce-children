@@ -1,6 +1,6 @@
 import axios from 'axios'
 const baseUrl = '/api/manual-register'
-const loginBaseUrl = '/api/session'
+const loginBaseUrl = '/api/sessions'
 const getLoggedUserUrl = '/api/login-user'
 
 const create = async (newuser) => {

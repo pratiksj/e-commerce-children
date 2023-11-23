@@ -1,5 +1,6 @@
 const productRouter = require('express').Router()
 const { api_key, api_secret } = require('../utils/config')
+const { requireUser, deserializeUser } = require('../utils/middleware')
 const cloudinary = require('cloudinary').v2
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
@@ -95,7 +96,22 @@ productRouter.post('/comment', async (req, res) => {
     }
 })
 
-productRouter.post('/cart', async (req, res) => {
+productRouter.post('/cart/:id', deserializeUser, requireUser, async (req, res) => {
+    try {
+        const productId = parseInt(req.params.id)
+        const userId = res.locals.user.id
+        const addItemInCart = await prisma.cartItem.create({
+            data: {
+                user_id: userId,
+                product_id: productId
+            }
+        })
+        res.status(201).json(addItemInCart)
+
+    } catch (error) { res.status(500).json({ error: "Error in Internal server" }) }
+
+
+
 
 
 })

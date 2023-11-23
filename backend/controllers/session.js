@@ -1,43 +1,43 @@
-const userSessionRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
-const { PrismaClient } = require('@prisma/client')
-const { createSession, findSession, updateSession } = require('../services/session')
-const { signJwt } = require('../utils/jwt.utils')
-const { deserializeUser, requireUser } = require('../utils/middleware')
+// const userSessionRouter = require('express').Router()
+// const jwt = require('jsonwebtoken')
+// const bcrypt = require('bcryptjs')
+// const { PrismaClient } = require('@prisma/client')
+// const { createSession, findSession, updateSession } = require('../services/session')
+// const { signJwt } = require('../utils/jwt.utils')
+// const { deserializeUser, requireUser } = require('../utils/middleware')
 
-const prisma = new PrismaClient()
-
-
-const validatePassword = async ({
-    email,
-    password,
-}) => {
-    const user = await prisma.user.findUnique({
-        where: {
-            email: email
-        }
-    })
-
-    if (!user) {
-        return false;
-    }
-    const passwordCorrect = user === null
-        ? false
-        : await bcrypt.compare(password, user.password)
-
-    //const isValid = await user.comparePassword(password);
-    if (!passwordCorrect) {
-        return res.status(401).json({
-            error: 'invalid username or password'
-        })
-    }
+// const prisma = new PrismaClient()
 
 
-    //if (!passwordCorrect) return false;
+// const validatePassword = async ({
+//     email,
+//     password,
+// }) => {
+//     const user = await prisma.user.findUnique({
+//         where: {
+//             email: email
+//         }
+//     })
 
-    return user;
-}
+//     if (!user) {
+//         return false;
+//     }
+//     const passwordCorrect = user === null
+//         ? false
+//         : await bcrypt.compare(password, user.password)
+
+//     //const isValid = await user.comparePassword(password);
+//     if (!passwordCorrect) {
+//         return res.status(401).json({
+//             error: 'invalid username or password'
+//         })
+//     }
+
+
+//     //if (!passwordCorrect) return false;
+
+//     return user;
+// }
 
 
 
