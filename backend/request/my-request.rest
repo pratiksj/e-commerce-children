@@ -15,7 +15,7 @@ Content-Type: application/json
    
 }
 ###
-DELETE http://localhost:3001/api/manual-register/9
+DELETE http://localhost:3001/api/manual-register/13
 
 ###
 POST http://localhost:3001/api/login
@@ -60,7 +60,7 @@ GET http://localhost:3001/api/sessions
 
 
 ###
-DELETE http://localhost:3001/api/sessions/2
+DELETE http://localhost:3001/api/session/5
 
 
 ###

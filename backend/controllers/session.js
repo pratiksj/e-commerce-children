@@ -91,7 +91,8 @@ userSessionRouter.post('/', async (req, res) => {
 })
 
 
-userSessionRouter.delete('/', deserializeUser, async (req, res) => {
+userSessionRouter.delete('/:id', async (req, res) => {
+    const categoryId = Number(req.params.id)
 
     const sessionId = res.locals.user.session
     await updateSession(sessionId, { valid: false })

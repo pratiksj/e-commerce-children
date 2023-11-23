@@ -53,7 +53,10 @@ export const Navbar = () => {
 
       <div className="nav-login-cart">
         {loggedInUser ? (
-          <div>welcome, {loggedInUser.name}</div>
+          <div>
+            <div>welcome, {loggedInUser.name}</div>
+            <button>Logout</button>
+          </div>
         ) : (
           <Link to="/login">
             <button>login</button>

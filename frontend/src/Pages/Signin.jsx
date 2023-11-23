@@ -31,6 +31,12 @@ export const SignIn = () => {
       console.log(error.message);
     }
   };
+  const handleGoogleButtonClick = () => {
+    const googleOAuthUrl = getGoogleOAuthUrl();
+
+    // Redirect to the Google OAuth URL
+    window.location.href = googleOAuthUrl;
+  };
   //   const navigation = useNavigation();
   //   const signupNavigator = () => {
   //     navigation("/register");
@@ -58,7 +64,7 @@ export const SignIn = () => {
             Login
           </button>
         </form>
-        <button className="google-api" onClick={getGoogleOAuthUrl()}>
+        <button className="google-api" onClick={handleGoogleButtonClick}>
           Google
         </button>
         <p className="loginsignup-login">

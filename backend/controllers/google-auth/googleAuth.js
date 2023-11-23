@@ -1,27 +1,28 @@
 const sessionRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
+
 const qs = require('qs')
-const { SECRET } = require('../../utils/config')
+
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const axios = require('axios')
 const { googleClient_id, googleClient_secret, googleOuthRedirectUrl } = require('../../utils/config')
-const createSession = require('../../services/session')
-// const { createSession } = require('../../services/session')
+const { createSession } = require('../../services/session')
+const { signJwt } = require('../../utils/jwt.utils')
 
-console.log("secret: ", SECRET)
+
+
 const accessTokenCookieOptions = {
-    maxAge: 900000, // 15 mins
-    httpOnly: true,
-    domain: "localhost",
-    path: "/",
-    sameSite: "lax",
+    maxAge: 900000,//15min
+    httpOnly: false,
+    domain: 'localhost', //for the production,set it in config
+    path: '/',
+    sameSite: 'strict',
     secure: false,
 };
 
 const refreshTokenCookieOptions = {
     ...accessTokenCookieOptions,
-    maxAge: 3.154e10, // 1 year
+    maxAge: 1800000, // 30min
 };
 
 const getGoogleOAuthTokens = async ({ code }) => {
@@ -67,7 +68,7 @@ const findCreateAndUpdateUser = async (userObj) => {
 
     const userExist = await prisma.user.findUnique({
         where: {
-            username: userObj.name
+            email: userObj.email
         }
     })
     if (!userExist) {
@@ -75,7 +76,7 @@ const findCreateAndUpdateUser = async (userObj) => {
             data: {
                 name: userObj.name,
                 email: userObj.email,
-                username: userObj.name
+
             }
         })
         return newUser
@@ -94,6 +95,8 @@ const findCreateAndUpdateUser = async (userObj) => {
 
 sessionRouter.get('/oauth/google', async (req, res) => {
     try {
+        //get the code from query string
+        console.log(req, 'request call back')
         const code = req.query.code
         //get the id and access token with the code
         const { id_token, access_token } = await getGoogleOAuthTokens({ code })
@@ -117,28 +120,26 @@ sessionRouter.get('/oauth/google', async (req, res) => {
         // } else if (user.updateUser) {
         //     return res.status(400).json({ msg: "user updated successfully", data: user.updateUser })
         // }
-        //create sessionsS
+        //create sessions
         const session = await createSession(user.id)
+
         console.log("sess: ", session)
 
         // create an access token
+        const accessToken = signJwt({ ...user, session: session.id }, '15m')
 
-        const accessToken = jwt.sign(
-            { ...user, session: session.id }, SECRET,
-            { expiresIn: '15m' } // 15 minutes
-        );
 
         // create a refresh token
-        const refreshToken = jwt.sign(
-            { ...user, session: session.id }, SECRET,
-            { expiresIn: '1y' } // 1 year
-        );
+        const refreshToken = signJwt({ ...user, session: session.id }, '30m')//15min
+
 
         // set cookies
+
+
         res.cookie("accessToken", accessToken, accessTokenCookieOptions);
 
         res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-        res.redirect('http://localhost:5173/');
+        res.redirect('http://localhost:5173');
 
 
     } catch (error) {

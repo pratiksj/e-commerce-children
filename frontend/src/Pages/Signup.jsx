@@ -36,6 +36,13 @@ export const Signup = () => {
     }
   };
 
+  const handleGoogleButtonClick = () => {
+    const googleOAuthUrl = getGoogleOAuthUrl();
+
+    // Redirect to the Google OAuth URL
+    window.location.href = googleOAuthUrl;
+  };
+
   return (
     <div className="loginsignup">
       <div className="loginsignup-container">
@@ -78,15 +85,14 @@ export const Signup = () => {
             Continue
           </button>
         </form>
-        <button className="google-api" onClick={getGoogleOAuthUrl}>
+
+        <button className="google-api" onClick={handleGoogleButtonClick}>
           Google
         </button>
         <p className="loginsignup-login">
           Already have an account? <Link to="/login">Login here</Link>
         </p>
-        {/* <p>
-          <a href={getGoogleOAuthUrl()}>register with google</a>
-        </p> */}
+
         <div className="loginsignup-agree">
           <input type="checkbox" name="" id="" />
           <p>By continuing,i agree to the terms of use & privacy policy.</p>
