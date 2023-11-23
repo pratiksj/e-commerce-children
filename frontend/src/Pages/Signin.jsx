@@ -6,7 +6,7 @@ import getGoogleOAuthUrl from "../services/googleService";
 import { useDispatch } from "react-redux";
 
 import "./CSS/LoginSignup.css";
-import { loginUser, currentUser } from "../reducers/userReducer";
+import { loginUser } from "../reducers/userReducer";
 
 export const SignIn = () => {
   const {
@@ -25,7 +25,7 @@ export const SignIn = () => {
           password: data.password,
         })
       );
-      dispatch(currentUser());
+
       reset();
       navigate("/");
     } catch (error) {

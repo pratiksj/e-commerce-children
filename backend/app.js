@@ -5,12 +5,17 @@ const productRouter = require('./controllers/product')
 const categoryRouter = require('./controllers/category')
 const middleware = require('./utils/middleware')
 const fileUpload = require('express-fileupload')
+const cors = require('cors')
 
 const cookieParser = require('cookie-parser')
 
 const sessionRouter = require('./controllers/google-auth/googleAuth')
 const userRouter = require('./controllers/user')
 
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}))
 
 
 app.use(cookieParser())

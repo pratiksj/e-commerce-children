@@ -1,6 +1,6 @@
 const sessionRouter = require('express').Router()
-
-
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
 const { createSession, findSession, updateSession } = require('../../services/session')
 const { findUser, findCreateAndUpdateUser, getGoogleUser, getGoogleOAuthTokens, validatePassword } = require('../../services/user')
 const { signJwt } = require('../../utils/jwt.utils')
@@ -9,7 +9,7 @@ const { deserializeUser, requireUser } = require('../../utils/middleware')
 
 const accessTokenCookieOptions = {
     maxAge: 300000,//15min
-    httpOnly: false,
+    httpOnly: true,
     domain: 'localhost', //for the production,set it in config
     path: '/',
     sameSite: 'strict',
@@ -43,17 +43,16 @@ sessionRouter.post('/', async (req, res) => {
     const session = await createSession(user.id)
 
     //create an access token
-    const accessToken = signJwt({ ...user, session: session.id }, '5m')
+    const accessToken = signJwt({ ...user, session: session.id }, '30m')
     //create an refresh token
     //const refreshToken = signJwt({ ...user, session: session.id }, '30m')//15min
     //return access and refresh tokens
     res.cookie('accessToken', accessToken, {
-        maxAge: 300000,//5min
-        httpOnly: false,
+        maxAge: 1800000,//30min
+        httpOnly: true,
         domain: 'localhost', //for the production,set it in config
-        path: '/',
-        sameSite: 'strict',
-        secure: false,  //for production set to the true
+        //path: '/',
+        //secure: false,  //for production set to the true
     })
 
     // res.cookie('refreshToken', refreshToken, {
@@ -65,43 +64,43 @@ sessionRouter.post('/', async (req, res) => {
     //     secure: false,  //for production set to the true
     // })
 
-    return res.send({ accessToken })
+    return res.send({ accessToken, user })
 
 })
 
 sessionRouter.delete('/:id', async (req, res) => {
     const categoryId = Number(req.params.id)
 
-    const sessionId = res.locals.user.session
-    await updateSession(sessionId, { valid: false })
+    // const sessionId = res.locals.user.session
+    // await updateSession(sessionId, { valid: false })
 
-    return res.send({
-        accessToken: null,
-        refreshToken: null
+    // return res.send({
+    //     accessToken: null,
+    //     refreshToken: null
 
-    })
-    // try {
-    //     const variation = await prisma.session.findUnique({
-    //         where: {
-    //             id: categoryId
-    //         }
-    //     })
+    // })
+    try {
+        const variation = await prisma.session.findUnique({
+            where: {
+                id: categoryId
+            }
+        })
 
 
-    //     if (!variation) {
-    //         return res.status(404).json({ error: 'User not found' })
-    //     }
+        if (!variation) {
+            return res.status(404).json({ error: 'User not found' })
+        }
 
-    //     await prisma.session.delete({
-    //         where: {
-    //             id: categoryId
-    //         }
-    //     })
-    //     res.json({ message: 'User deleted successfully' })
+        await prisma.session.delete({
+            where: {
+                id: categoryId
+            }
+        })
+        res.json({ message: 'session deleted successfully' })
 
-    // } catch (error) {
-    //     console.log(error)
-    // }
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 

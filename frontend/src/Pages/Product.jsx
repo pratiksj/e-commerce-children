@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 export const Product = () => {
   const all_Product = useSelector((state) => state.products);
   const match = useMatch("/product/:id");
-  console.log(match, "match");
   const product = match
     ? all_Product.find((item) => item.product_id === Number(match.params.id))
     : null;

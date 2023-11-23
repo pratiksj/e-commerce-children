@@ -27,3 +27,5 @@ export const getProduct = () => {
         dispatch(setProduct(product))
     }
 }
+
+

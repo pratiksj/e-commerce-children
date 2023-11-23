@@ -1,4 +1,5 @@
 const productRouter = require('express').Router()
+
 const { api_key, api_secret } = require('../utils/config')
 const { requireUser, deserializeUser } = require('../utils/middleware')
 const cloudinary = require('cloudinary').v2
@@ -20,7 +21,8 @@ productRouter.get('/', async (req, res) => {
                     select: {
                         comment_text: true
                     }
-                }
+                },
+                cartItems: true
             }
         })
         res.json(products)
@@ -98,7 +100,11 @@ productRouter.post('/comment', async (req, res) => {
 
 productRouter.post('/cart/:id', deserializeUser, requireUser, async (req, res) => {
     try {
-        const productId = parseInt(req.params.id)
+        let productId = req.params.id
+        if (typeof productId !== 'number') {
+
+            productId = parseInt(req.params.id)
+        }
         const userId = res.locals.user.id
         const addItemInCart = await prisma.cartItem.create({
             data: {
@@ -114,6 +120,41 @@ productRouter.post('/cart/:id', deserializeUser, requireUser, async (req, res) =
 
 
 
+})
+
+productRouter.delete('/cart/:id', async (req, res) => {
+    const categoryId = Number(req.params.id)
+
+    // const sessionId = res.locals.user.session
+    // await updateSession(sessionId, { valid: false })
+
+    // return res.send({
+    //     accessToken: null,
+    //     refreshToken: null
+
+    // })
+    try {
+        const variation = await prisma.cartItem.findUnique({
+            where: {
+                id: categoryId
+            }
+        })
+
+
+        if (!variation) {
+            return res.status(404).json({ error: 'cart not found' })
+        }
+
+        await prisma.cartItem.delete({
+            where: {
+                id: categoryId
+            }
+        })
+        res.json({ message: 'cart deleted successfully' })
+
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 module.exports = productRouter

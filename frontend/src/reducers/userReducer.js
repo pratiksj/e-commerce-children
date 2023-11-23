@@ -30,20 +30,21 @@ export const creatUser = (user) => {
 }
 
 export const loginUser = (credential) => {
-    return async () => {
-        await userService.login(credential)
+    return async (dispatch) => {
+        const currentUser = await userService.login(credential)
+        dispatch(setUser(currentUser.user))
 
     };
 };
 
-export const currentUser = () => {
-    return async (dispatch) => {
-        console.log('hellow')
-        const loginUser = await userService.getloggedInUser()
-        console.log(loginUser, 'currentUser')
-        dispatch(setUser(loginUser));
-    }
-}
+// export const currentUser = () => {
+//     return async (dispatch) => {
+//         console.log('hellow')
+//         const loginUser = await userService.getloggedInUser()
+//         console.log(loginUser, 'currentUser')
+//         dispatch(setUser(loginUser));
+//     }
+// }
 
 
 

@@ -2,6 +2,7 @@ import "./Breadcrums.css";
 
 export const Breadcrums = (props) => {
   const { product } = props;
+  console.log(product, "from bedscrum");
 
   return (
     <div className="breadcrum">

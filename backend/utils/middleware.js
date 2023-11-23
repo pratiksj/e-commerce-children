@@ -31,6 +31,7 @@ const errorHandler = (error, request, response, next) => {
 
 const deserializeUser = async (req, res, next) => {
     console.log('hellow i ma here')
+    console.log(req.cookies, 'request')
 
 
     //get from the lodash is used for safely accessing nested object without throwin error
