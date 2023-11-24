@@ -124,13 +124,7 @@ sessionRouter.get('/oauth/google', async (req, res) => {
         const user = await findCreateAndUpdateUser(googleUser)
         console.log("user: ", user)
 
-        // if (user.newUser) {
 
-
-        //     //return res.status(201).json({ msg: "user created", data: user.newUser })
-        // } else if (user.updateUser) {
-        //     return res.status(400).json({ msg: "user updated successfully", data: user.updateUser })
-        // }
         //create sessions
         const session = await createSession(user.id)
 
