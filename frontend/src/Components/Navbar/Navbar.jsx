@@ -3,13 +3,17 @@ import logo from "../assets/forth.png";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { ShopContext } from "../../Context/ShopContext";
+//import { ShopContext } from "../../Context/ShopContext";
 
 export const Navbar = () => {
   const [menu, setMenu] = useState("Home");
-  const { getTotalCartItems } = useContext(ShopContext);
+  //const { getTotalCartItems } = useContext(ShopContext);
+  const loggedInUser = useSelector((state) => state.user);
+  const cartItem = useSelector((state) => state.cart);
+  const total = cartItem.length;
 
   return (
     <div className="navbar">
@@ -50,16 +54,23 @@ export const Navbar = () => {
       </ul>
 
       <div className="nav-login-cart">
-        <Link to="/login">
-          <button>login</button>
-        </Link>
+        {loggedInUser ? (
+          <div>
+            <div>welcome, {loggedInUser.name}</div>
+            <button>Logout</button>
+          </div>
+        ) : (
+          <Link to="/login">
+            <button>login</button>
+          </Link>
+        )}
 
         <Link to="/cart">
           {" "}
           <FontAwesomeIcon className="cart" icon={faCartShopping} />
         </Link>
 
-        <div className="nav-cart-count">{getTotalCartItems()}</div>
+        <div className="nav-cart-count">{total}</div>
       </div>
     </div>
   );

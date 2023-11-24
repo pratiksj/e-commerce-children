@@ -11,10 +11,9 @@ datasource db {
 
 model User {
   id      Int      @id @default(autoincrement())
-  username   String?   @unique
+  email String @unique
   name    String
   password String?
-  email String
   address String?
   contact String?
   comments Comment[]
@@ -58,8 +57,8 @@ user  User @relation(fields: [user_id], references: [id])
 user_id  Int
 product  Product  @relation(fields: [product_id], references: [product_id])
 product_id   Int
-quantity   Int
-price Int
+quantity   Int? @default(0)
+price Int? @default(0)
 timestamp  DateTime @default(now())
 
 }
@@ -68,6 +67,7 @@ model Session{
   id   Int @id @default(autoincrement())
   user  User @relation(fields: [user_id], references: [id])
   user_id Int
+  valid Boolean @default(true)
 
 }
 

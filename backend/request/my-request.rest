@@ -2,30 +2,22 @@ GET http://localhost:3001/api/manual-register
 
 
 ###
-POST http://localhost:3001//api/manual-register
+POST http://localhost:3001/api/manual-register
 Content-Type: application/json
 
 {
-   "username":"akxita",
-   "name":"akxita",
-   "password":"password",
-   "email":"axita@gmail.com",
-   "address":"ekantakuna",
-   "contact":"7878787878"
+  
+   
+   "email":"pratik@gmail.com",
+   "name":"pratik",
+   "password":"pratik"
+   
    
 }
 ###
-DELETE http://localhost:3001/api/manual-register/9
+DELETE http://localhost:3001/api/manual-register/13
 
-###
-POST http://localhost:3001/api/login
-Content-Type: application/json
 
-{
-   "username":"akxita",
-   "password":"password"
-   
-}
 
 ###
 GET http://localhost:3001/api/category
@@ -60,4 +52,27 @@ GET http://localhost:3001/api/sessions
 
 
 ###
-DELETE http://localhost:3001/api/sessions/2
+DELETE http://localhost:3001/api/sessions/80
+
+
+###
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+   "email":"pratik@gmail.com",
+   "password":"pratik"
+
+}
+
+###
+POST http://localhost:3001/api/products/cart/1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImVtYWlsIjoicHJhdGlrQGdtYWlsLmNvbSIsIm5hbWUiOiJwcmF0aWsiLCJwYXNzd29yZCI6IiQyYSQxMCRwcWFnaVZXV0lnU1BKbUlQdXRpcmx1U3dyMXVld0dXcEYxb011VjFKTFdDNExrczlXUlJTRyIsImFkZHJlc3MiOm51bGwsImNvbnRhY3QiOm51bGwsInNlc3Npb24iOjU3LCJpYXQiOjE3MDA3Mjc2NTEsImV4cCI6MTcwMDcyNzk1MX0.SU0MEfe_R2IlbszggWDg8YwKsdpDjDCH6xTd8A-Uqxs
+
+###
+DELETE  http://localhost:3001/api/products/cart/8
+
+###
+GET  http://localhost:3001/api/session
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsImVtYWlsIjoiYXhpdGExMkBnbWFpbC5jb20iLCJuYW1lIjoiYWt4aXRhIiwicGFzc3dvcmQiOiIkMmEkMTAkYmp0b3VkdUtsTk1Sb0Y4REQ5ZGJnLndwRHBWWWxrWml1ZFdocnkzcXova2JmenhISTFYY0MiLCJhZGRyZXNzIjpudWxsLCJjb250YWN0IjpudWxsLCJzZXNzaW9uIjoyMiwiaWF0IjoxNzAwMzkzNzU4LCJleHAiOjE3MDAzOTM4MTh9.TraGaJaNZPmcJhHculory9b7o8aTs4iduDP6CsrYOHA
+x-refresh: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsImVtYWlsIjoiYXhpdGExMkBnbWFpbC5jb20iLCJuYW1lIjoiYWt4aXRhIiwicGFzc3dvcmQiOiIkMmEkMTAkYmp0b3VkdUtsTk1Sb0Y4REQ5ZGJnLndwRHBWWWxrWml1ZFdocnkzcXova2JmenhISTFYY0MiLCJhZGRyZXNzIjpudWxsLCJjb250YWN0IjpudWxsLCJzZXNzaW9uIjoyMiwiaWF0IjoxNzAwMzkzNzU4LCJleHAiOjE3MDAzOTQ2NTh9.NHfWqPPjP64O7FcMnTw5STu-AuOFzElEhgorHGglGyE

@@ -1,14 +1,21 @@
 import "./ProductDisplay.css";
-import { useContext } from "react";
+//import { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { addCart } from "../../reducers/cartReducer";
 
 import { faStarHalfStroke } from "@fortawesome/free-regular-svg-icons";
-import { ShopContext } from "../../Context/ShopContext";
+//import { ShopContext } from "../../Context/ShopContext";
 
 export const ProductDisplay = (props) => {
   const { product } = props;
-  const { addToCart } = useContext(ShopContext);
+
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    dispatch(addCart(product.product_id));
+  };
+  //const { addToCart } = useContext(ShopContext);
   return (
     <div className="productdisplay">
       <div className="productdisplay-left">
@@ -57,13 +64,7 @@ export const ProductDisplay = (props) => {
             <div>L</div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            addToCart(product.id);
-          }}
-        >
-          Add to CART
-        </button>
+        <button onClick={handleAddToCart}>Add to CART</button>
         <p className="productdisplay-right-category">
           <span>Category :</span>
           {product.category.category_name}

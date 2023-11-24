@@ -1,105 +1,84 @@
 const sessionRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
-const qs = require('qs')
-const { SECRET } = require('../../utils/config')
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
-const axios = require('axios')
-const { googleClient_id, googleClient_secret, googleOuthRedirectUrl } = require('../../utils/config')
-const createSession = require('../../services/session')
-// const { createSession } = require('../../services/session')
+const { createSession, findSession, updateSession } = require('../../services/session')
+const { findUser, findCreateAndUpdateUser, getGoogleUser, getGoogleOAuthTokens, validatePassword } = require('../../services/user')
+const { signJwt } = require('../../utils/jwt.utils')
+const { deserializeUser, requireUser } = require('../../utils/middleware')
 
-console.log("secret: ", SECRET)
+
 const accessTokenCookieOptions = {
-    maxAge: 900000, // 15 mins
+    maxAge: 300000,//15min
     httpOnly: true,
-    domain: "localhost",
-    path: "/",
-    sameSite: "lax",
+    domain: 'localhost', //for the production,set it in config
+    path: '/',
+    sameSite: 'strict',
     secure: false,
 };
 
-const refreshTokenCookieOptions = {
-    ...accessTokenCookieOptions,
-    maxAge: 3.154e10, // 1 year
-};
+// const refreshTokenCookieOptions = {
+//     ...accessTokenCookieOptions,
+//     maxAge: 1800000, // 30min
+// };
 
-const getGoogleOAuthTokens = async ({ code }) => {
-    //define baseUrl 
-    const url = 'https://oauth2.googleapis.com/token'
-    const values = {
-        code,
-        client_id: googleClient_id,
-        client_secret: googleClient_secret,
-        redirect_uri: googleOuthRedirectUrl,
-        grant_type: "authorization_code"
-    }
-    try {
-        const res = await axios.post(url, qs.stringify(values), {
-            headers: {
-                "Content-Type": 'application/x-www-form-urlencoded',
-            }
-        })
-        return res.data
 
-    } catch (error) {
-        console.log(error.response.data.error)
-        res.send(error.message)
-    }
-}
 
-const getGoogleUser = async ({ id_token, access_token }) => {
-    try {
-        const res = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`, {
-            headers: {
-                Authorization: `Bearer ${id_token}`
-            }
-        })
+sessionRouter.get('/', deserializeUser, requireUser, async (req, res) => {
+    const userId = res.locals.user.id
 
-        return res.data
-    } catch (error) {
-        log.error(error, 'Error fetching Google user')
-        throw new Error(error.message)
-    }
-}
 
-const findCreateAndUpdateUser = async (userObj) => {
-    console.log(userObj.id, 'ey')
-    const userExist = await prisma.user.findUnique({
-        where: {
-            username: userObj.name
-        }
-    })
-    if (!userExist) {
-        const newUser = await prisma.user.create({
-            data: {
-                name: userObj.name,
-                email: userObj.email,
-                username: userObj.name
-            }
-        })
-        return newUser
-    } else {
-        return userExist
+    const sessions = await findSession({ userId, valid: true })
 
-    }
-}
-
-sessionRouter.get('/', async (req, res) => {
-    try {
-        const variation = await prisma.session.findMany()
-        res.json(variation)
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: `Internal sever Error` })
-    }
-
+    return res.send(sessions)
 })
 
 
+sessionRouter.post('/', async (req, res) => {
+    //validate the user password
+    const user = await validatePassword(req.body)
+    if (!user) {
+        return res.status(401).send('Invalid email or password')
+    }
+    //create a session
+    const session = await createSession(user.id)
+
+    //create an access token
+    const accessToken = signJwt({ ...user, session: session.id }, '30m')
+    //create an refresh token
+    //const refreshToken = signJwt({ ...user, session: session.id }, '30m')//15min
+    //return access and refresh tokens
+    res.cookie('accessToken', accessToken, {
+        maxAge: 1800000,//30min
+        httpOnly: true,
+        domain: 'localhost', //for the production,set it in config
+        //path: '/',
+        //secure: false,  //for production set to the true
+    })
+
+    // res.cookie('refreshToken', refreshToken, {
+    //     maxAge: 1800000,//30min
+    //     httpOnly: false,
+    //     domain: 'localhost', //for the production,set it in config
+    //     path: '/',
+    //     sameSite: 'strict',
+    //     secure: false,  //for production set to the true
+    // })
+
+    return res.send({ accessToken, user })
+
+})
 
 sessionRouter.delete('/:id', async (req, res) => {
-    const categoryId = parseInt(req.params.id)
+    const categoryId = Number(req.params.id)
+
+    // const sessionId = res.locals.user.session
+    // await updateSession(sessionId, { valid: false })
+
+    // return res.send({
+    //     accessToken: null,
+    //     refreshToken: null
+
+    // })
     try {
         const variation = await prisma.session.findUnique({
             where: {
@@ -117,7 +96,7 @@ sessionRouter.delete('/:id', async (req, res) => {
                 id: categoryId
             }
         })
-        res.json({ message: 'User deleted successfully' })
+        res.json({ message: 'session deleted successfully' })
 
     } catch (error) {
         console.log(error)
@@ -125,12 +104,10 @@ sessionRouter.delete('/:id', async (req, res) => {
 })
 
 
-
-
-
-
 sessionRouter.get('/oauth/google', async (req, res) => {
     try {
+        //get the code from query string
+        console.log(req, 'request call back')
         const code = req.query.code
         //get the id and access token with the code
         const { id_token, access_token } = await getGoogleOAuthTokens({ code })
@@ -147,35 +124,27 @@ sessionRouter.get('/oauth/google', async (req, res) => {
         const user = await findCreateAndUpdateUser(googleUser)
         console.log("user: ", user)
 
-        // if (user.newUser) {
 
-
-        //     //return res.status(201).json({ msg: "user created", data: user.newUser })
-        // } else if (user.updateUser) {
-        //     return res.status(400).json({ msg: "user updated successfully", data: user.updateUser })
-        // }
-        //create sessionsS
+        //create sessions
         const session = await createSession(user.id)
+
         console.log("sess: ", session)
 
         // create an access token
+        const accessToken = signJwt({ ...user, session: session.id }, '5m')
 
-        const accessToken = jwt.sign(
-            { ...user, session: session.id }, SECRET,
-            { expiresIn: '15m' } // 15 minutes
-        );
 
         // create a refresh token
-        const refreshToken = jwt.sign(
-            { ...user, session: session.id }, SECRET,
-            { expiresIn: '1y' } // 1 year
-        );
+        //const refreshToken = signJwt({ ...user, session: session.id }, '30m')//15min
+
 
         // set cookies
+
+
         res.cookie("accessToken", accessToken, accessTokenCookieOptions);
 
-        res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-        res.redirect('http://localhost:5173/');
+        //res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+        res.redirect('http://localhost:5173');
 
 
     } catch (error) {

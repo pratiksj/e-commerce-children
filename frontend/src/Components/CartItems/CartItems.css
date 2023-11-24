@@ -104,3 +104,21 @@
   color: white;
   cursor: pointer;
 }
+
+.cartitem-quantity-display {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-btn {
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.quantity {
+  margin: 0 10px;
+  font-size: 18px;
+  /* font-weight: bold; */
+}
