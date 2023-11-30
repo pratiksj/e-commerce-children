@@ -52,7 +52,7 @@ GET http://localhost:3001/api/sessions
 
 
 ###
-DELETE http://localhost:3001/api/sessions/80
+DELETE http://localhost:3001/api/sessions/101
 
 
 ###
@@ -70,7 +70,7 @@ POST http://localhost:3001/api/products/cart/1
 authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsImVtYWlsIjoicHJhdGlrQGdtYWlsLmNvbSIsIm5hbWUiOiJwcmF0aWsiLCJwYXNzd29yZCI6IiQyYSQxMCRwcWFnaVZXV0lnU1BKbUlQdXRpcmx1U3dyMXVld0dXcEYxb011VjFKTFdDNExrczlXUlJTRyIsImFkZHJlc3MiOm51bGwsImNvbnRhY3QiOm51bGwsInNlc3Npb24iOjU3LCJpYXQiOjE3MDA3Mjc2NTEsImV4cCI6MTcwMDcyNzk1MX0.SU0MEfe_R2IlbszggWDg8YwKsdpDjDCH6xTd8A-Uqxs
 
 ###
-DELETE  http://localhost:3001/api/products/cart/8
+DELETE  http://localhost:3001/api/products/cart/12
 
 ###
 GET  http://localhost:3001/api/session

@@ -9,7 +9,7 @@ const { deserializeUser, requireUser } = require('../../utils/middleware')
 
 const accessTokenCookieOptions = {
     maxAge: 300000,//15min
-    httpOnly: true,
+    httpOnly: false,
     domain: 'localhost', //for the production,set it in config
     path: '/',
     sameSite: 'strict',
@@ -36,6 +36,7 @@ sessionRouter.get('/', deserializeUser, requireUser, async (req, res) => {
 sessionRouter.post('/', async (req, res) => {
     //validate the user password
     const user = await validatePassword(req.body)
+
     if (!user) {
         return res.status(401).send('Invalid email or password')
     }
@@ -47,6 +48,11 @@ sessionRouter.post('/', async (req, res) => {
     //create an refresh token
     //const refreshToken = signJwt({ ...user, session: session.id }, '30m')//15min
     //return access and refresh tokens
+    const loggedInuser = {
+        email: user.email,
+        name: user.name
+    }
+    const loggedInuserInjson = JSON.stringify(loggedInuser)
     res.cookie('accessToken', accessToken, {
         maxAge: 1800000,//30min
         httpOnly: true,
@@ -54,6 +60,7 @@ sessionRouter.post('/', async (req, res) => {
         //path: '/',
         //secure: false,  //for production set to the true
     })
+    res.cookie('user', loggedInuserInjson)
 
     // res.cookie('refreshToken', refreshToken, {
     //     maxAge: 1800000,//30min
@@ -123,6 +130,11 @@ sessionRouter.get('/oauth/google', async (req, res) => {
 
         const user = await findCreateAndUpdateUser(googleUser)
         console.log("user: ", user)
+        const loginUser = {
+            email: user.email,
+            name: user.name
+        }
+        const currentUser = JSON.stringify(loginUser)
 
 
         //create sessions
@@ -142,6 +154,9 @@ sessionRouter.get('/oauth/google', async (req, res) => {
 
 
         res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+
+        res.cookie("user", currentUser);
+        //res.send(user)
 
         //res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
         res.redirect('http://localhost:5173');

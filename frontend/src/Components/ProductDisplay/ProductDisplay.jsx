@@ -57,13 +57,13 @@ export const ProductDisplay = (props) => {
           students that love to fidget Slide, spin, pull, or bump the pencil
           fidgets Note: Pencil style may vary
         </div>
-        <div className="productdisplay-right-size">
+        {/* <div className="productdisplay-right-size">
           <h1>Select size</h1>
           <div className="productdisplay-right-size">
             <div>S</div>
             <div>L</div>
           </div>
-        </div>
+        </div> */}
         <button onClick={handleAddToCart}>Add to CART</button>
         <p className="productdisplay-right-category">
           <span>Category :</span>

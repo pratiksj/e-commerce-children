@@ -37,6 +37,12 @@ export const loginUser = (credential) => {
     };
 };
 
+export const fromGoogle = (userFromGoogle) => {
+    return async (dispatch) => {
+        dispatch(setUser(userFromGoogle))
+    }
+}
+
 // export const currentUser = () => {
 //     return async (dispatch) => {
 //         console.log('hellow')

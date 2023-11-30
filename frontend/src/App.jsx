@@ -12,12 +12,27 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { SignIn } from "./Pages/signin";
 import { Signup } from "./Pages/Signup";
+import { fromGoogle } from "./reducers/userReducer";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProduct());
-    //const accessToken = document.cookie; // Access all cookies
+    const cookies = document.cookie.split(";");
+    let loggedInuser = null;
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+
+      if (cookie.startsWith("user=")) {
+        loggedInuser = cookie.substring("user=".length, cookie.length);
+        break;
+      }
+    }
+    const decodedUrl = decodeURIComponent(loggedInuser);
+    const jsonObject = JSON.parse(decodedUrl);
+
+    dispatch(fromGoogle(jsonObject));
+    // Access all cookies
   }, []);
   return (
     <div>

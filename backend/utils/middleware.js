@@ -36,7 +36,9 @@ const deserializeUser = async (req, res, next) => {
 
     //get from the lodash is used for safely accessing nested object without throwin error
     const accessToken = get(req, "cookies.accessToken") || get(req, "headers.authorization", "").replace(/^Bearer\s/, "")
+    //const accessSecoken = get(req, "cookies.access123") || get(req, "headers.authorization", "").replace(/^Bearer\s/, "")
     // const refreshToken = get(req, "cookies.refreshToken") || get(req, "headers.x-refresh");
+
     console.log(accessToken, 'accessToken')
     const { decoded, expired } = verifyJwt(accessToken)
 

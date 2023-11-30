@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 
 
 registerRouter.get('/hellow', (req, res) => {
-    res.send('<h1>Hellow World</h1>')
+    res.send('<h1>Hello World</h1>')
 })
 
 registerRouter.get('/', async (req, res) => {
