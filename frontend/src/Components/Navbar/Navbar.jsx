@@ -12,8 +12,9 @@ export const Navbar = () => {
   const [menu, setMenu] = useState("Home");
   //const { getTotalCartItems } = useContext(ShopContext);
   const loggedInUser = useSelector((state) => state.user);
-  const cartItem = useSelector((state) => state.cart);
-  const total = cartItem.length;
+  const userWithCart = useSelector((state) => state.user);
+  const total =
+    userWithCart && userWithCart.cartItems ? userWithCart.cartItems.length : 0;
 
   return (
     <div className="navbar">

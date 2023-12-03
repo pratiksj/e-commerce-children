@@ -1,8 +1,10 @@
-const { verify } = require('jsonwebtoken')
+//const { verify } = require('jsonwebtoken')
 const logger = require('./logger')
 const { verifyJwt } = require('./jwt.utils')
 const { get } = require('lodash')
 const { reIssueAccessToken } = require('../services/session')
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
 
 const requestLogger = (request, response, next) => {
     logger.info('Method:', request.method)
@@ -30,8 +32,7 @@ const errorHandler = (error, request, response, next) => {
 }
 
 const deserializeUser = async (req, res, next) => {
-    console.log('hellow i ma here')
-    console.log(req.cookies, 'request')
+
 
 
     //get from the lodash is used for safely accessing nested object without throwin error
@@ -39,8 +40,21 @@ const deserializeUser = async (req, res, next) => {
     //const accessSecoken = get(req, "cookies.access123") || get(req, "headers.authorization", "").replace(/^Bearer\s/, "")
     // const refreshToken = get(req, "cookies.refreshToken") || get(req, "headers.x-refresh");
 
-    console.log(accessToken, 'accessToken')
+
     const { decoded, expired } = verifyJwt(accessToken)
+    if (decoded === null) {
+        return res.status(404)
+    }
+    const decodedUser = await prisma.user.findUnique({
+        where: {
+            email: decoded.email
+        },
+        include: {
+            cartItems: true
+        }
+    })
+
+    //console.log(decodedUser, 'dcodedUser')
 
     // if (expired && refreshToken) {
     //     const newAccessToken = await reIssueAccessToken({ refreshToken })
@@ -73,7 +87,7 @@ const deserializeUser = async (req, res, next) => {
     if (expired) {
         return res.status(401).json({ error: 'token expired logged in again' })
     }
-    res.locals.user = decoded
+    res.locals.user = decodedUser
     next()
 }
 

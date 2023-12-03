@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/manual-register'
 const loginBaseUrl = '/api/sessions'
-//const getLoggedUserUrl = '/api/login-user'
+const getLoggedUserUrl = '/api/login-user'
 
 
 const create = async (newuser) => {
@@ -10,15 +10,30 @@ const create = async (newuser) => {
 }
 const login = async (credential) => {
     const request = await axios.post(loginBaseUrl, credential)
-    return request.data
+
+    const getLoggedInUser = await axios.get(getLoggedUserUrl, null, {
+        withCredentials: true,
+    })
+    const response = {
+        user: request.data,
+        currentUser: getLoggedInUser.data
+    }
+    return response
+
 }
-
-// const getloggedInUser = async () => {
-//     const request = await axios.get(getLoggedUserUrl, {
+// const remove = async (id) => {
+//     const request = await axios.delete(`${loginBaseUrl}/${id}`, {
 //         withCredentials: true,
-
 //     })
 //     return request.data
 // }
 
-export default { create, login }
+const getloggedInUser = async () => {
+    const request = await axios.get(getLoggedUserUrl, null, {
+        withCredentials: true,
+
+    })
+    return request.data
+}
+
+export default { create, login, getloggedInUser }

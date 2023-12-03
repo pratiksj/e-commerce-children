@@ -3,9 +3,11 @@ import "./ProductDisplay.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { addCart } from "../../reducers/cartReducer";
+//import { addCart } from "../../reducers/cartReducer";
 
 import { faStarHalfStroke } from "@fortawesome/free-regular-svg-icons";
+import { joinCart } from "../../reducers/userReducer";
+
 //import { ShopContext } from "../../Context/ShopContext";
 
 export const ProductDisplay = (props) => {
@@ -13,7 +15,8 @@ export const ProductDisplay = (props) => {
 
   const dispatch = useDispatch();
   const handleAddToCart = () => {
-    dispatch(addCart(product.product_id));
+    //dispatch(addCart(product.product_id));
+    dispatch(joinCart(product.product_id));
   };
   //const { addToCart } = useContext(ShopContext);
   return (

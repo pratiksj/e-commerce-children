@@ -4,23 +4,42 @@ import "./CartItems.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import {
+  increaseQuantity,
+  minusQuantity,
+  removeCart,
+} from "../../reducers/userReducer";
 export const CartItems = () => {
+  const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
 
-  const cartItem = useSelector((state) => state.cart);
-  console.log(cartItem, "item");
+  const cartItem = useSelector((state) => state.user);
+  //const quantity= useSelector((state)=>state.user.cartItems)
 
   const getProductDetails = (productId) => {
     return products.find((product) => product.product_id === productId);
   };
-  const [quantities, setQuantity] = useState({});
+  //const [quantity, setQuantity] = useState({});
 
-  const updateQuantity = (productId, newQuantity) => {
-    setQuantity((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: newQuantity > 1 ? newQuantity : 1,
-    }));
+  // const updateQuantity = (productId, newQuantity) => {
+
+  //   setQuantity((prevQuantities) => ({
+  //     ...prevQuantities,
+  //     [productId]: newQuantity > 1 ? newQuantity : 1,
+  //   }));
+  // };
+
+  const updateQuantity = (obj) => {
+    dispatch(increaseQuantity(obj));
+  };
+  const decreaseQuantity = (obj) => {
+    console.log(obj, "from decrease");
+    dispatch(minusQuantity(obj));
+  };
+  const removeFromCart = (id) => {
+    dispatch(removeCart(id));
   };
 
   return (
@@ -34,57 +53,56 @@ export const CartItems = () => {
         <p>remove</p>
       </div>
       <hr />
-      {cartItem.map((item) => {
-        const product = getProductDetails(item.product_id);
-        const quantity = quantities[item.product_id];
+      {cartItem === null || cartItem.cartItems === undefined
+        ? null
+        : cartItem.cartItems.map((item) => {
+            const product = getProductDetails(item.product_id);
+            console.log(item, "het");
+            //const quantity = quantities[item.product_id];
 
-        if (product) {
-          return (
-            <div key={item.id}>
-              <div className="cartitem-format cartitem-format-main">
-                <img
-                  src={product.image}
-                  alt=""
-                  className="carticon-product-icon"
-                />
-                <p>{product.name}</p>
-                <p>Rs{product.price}</p>
-                {/* <button className="cartitem-quantity">{}</button> */}
-                <div className="cartitem-quantity-display">
-                  <button
-                    className="quantity-btn"
-                    onClick={() =>
-                      updateQuantity(item.product_id, quantity - 1)
-                    }
-                  >
-                    -
-                  </button>
-                  <p className="quantity">{quantity ? quantity : 0}</p>
-                  <button
-                    className="quantity-btn"
-                    onClick={() =>
-                      updateQuantity(item.product_id, quantity + 1)
-                    }
-                  >
-                    +
-                  </button>
+            if (product) {
+              return (
+                <div key={item.id}>
+                  <div className="cartitem-format cartitem-format-main">
+                    <img
+                      src={product.image}
+                      alt=""
+                      className="carticon-product-icon"
+                    />
+                    <p>{product.name}</p>
+                    <p>Rs{product.price}</p>
+                    {/* <button className="cartitem-quantity">{}</button> */}
+                    <div className="cartitem-quantity-display">
+                      <button
+                        className="quantity-btn"
+                        onClick={() => decreaseQuantity(item)}
+                      >
+                        -
+                      </button>
+                      <p className="quantity">{item ? item.quantity : 0}</p>
+                      <button
+                        className="quantity-btn"
+                        onClick={() => updateQuantity(item)}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <p>Rs {}</p>
+
+                    <FontAwesomeIcon
+                      className="cartitems-remove-icon"
+                      icon={faXmark}
+                      onClick={() => {
+                        removeFromCart(item.id);
+                      }}
+                    />
+                  </div>
+                  <hr />
                 </div>
-                <p>Rs {}</p>
-
-                <FontAwesomeIcon
-                  className="cartitems-remove-icon"
-                  icon={faXmark}
-                  // onClick={() => {
-                  //   removeFromCart(item.id);
-                  // }}
-                />
-              </div>
-              <hr />
-            </div>
-          );
-        }
-        return null;
-      })}
+              );
+            }
+            return null;
+          })}
       <div className="cartitems-down">
         <div className="cartItems-total">
           <h1>carts Totals</h1>

@@ -122,7 +122,7 @@ productRouter.post('/cart/:id', deserializeUser, requireUser, async (req, res) =
 
 })
 
-productRouter.delete('/cart/:id', async (req, res) => {
+productRouter.delete('/cart/:id', deserializeUser, async (req, res) => {
     const categoryId = Number(req.params.id)
 
     // const sessionId = res.locals.user.session
@@ -145,15 +145,44 @@ productRouter.delete('/cart/:id', async (req, res) => {
             return res.status(404).json({ error: 'cart not found' })
         }
 
-        await prisma.cartItem.delete({
+        const deletedCart = await prisma.cartItem.delete({
             where: {
                 id: categoryId
             }
         })
-        res.json({ message: 'cart deleted successfully' })
+        res.send(deletedCart)
 
     } catch (error) {
         console.log(error)
+    }
+})
+
+productRouter.put('/cart/:id', deserializeUser, async (req, res) => {
+    const cartId = Number(req.params.id)
+    try {
+        const updatedItem = await prisma.cartItem.update({
+            where: { id: cartId },
+            data: { quantity: Number(req.body.quantity) }
+
+        })
+        res.json(updatedItem)
+
+
+    } catch (error) {
+        res.status(500).json({ error: 'failded to updatae cart' })
+    }
+
+})
+
+productRouter.get('/cart', async (req, res) => {
+    try {
+        const allCart = await prisma.cartItem.findMany()
+
+        res.json(allCart)
+
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' })
+
     }
 })
 

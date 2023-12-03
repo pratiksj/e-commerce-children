@@ -12,28 +12,38 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { SignIn } from "./Pages/signin";
 import { Signup } from "./Pages/Signup";
-import { fromGoogle } from "./reducers/userReducer";
+import { currentUser } from "./reducers/userReducer";
+//import { getCart } from "./reducers/cartReducer";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProduct());
-    const cookies = document.cookie.split(";");
-    let loggedInuser = null;
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i];
+    dispatch(currentUser());
+    // const cookies = document.cookie.split(";");
 
-      if (cookie.startsWith("user=")) {
-        loggedInuser = cookie.substring("user=".length, cookie.length);
-        break;
-      }
-    }
-    const decodedUrl = decodeURIComponent(loggedInuser);
-    const jsonObject = JSON.parse(decodedUrl);
+    // let loggedInuser = null;
+    // for (let i = 0; i < cookies.length; i++) {
+    //   const cookie = cookies[i];
 
-    dispatch(fromGoogle(jsonObject));
+    //   if (cookie.startsWith("user=")) {
+    //     loggedInuser = cookie.substring("user=".length, cookie.length);
+    //     break;
+    //   }
+    // }
+    // if (loggedInuser) {
+    //   const decodedUrl = decodeURIComponent(loggedInuser);
+
+    //   const jsonObject = JSON.parse(decodedUrl);
+
+    //   //dispatch(fromGoogle(jsonObject));
+
+    //   //dispatch(getCart());
+    // }
+
     // Access all cookies
   }, []);
+
   return (
     <div>
       <Navbar />

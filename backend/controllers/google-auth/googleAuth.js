@@ -37,6 +37,7 @@ sessionRouter.post('/', async (req, res) => {
     //validate the user password
     const user = await validatePassword(req.body)
 
+
     if (!user) {
         return res.status(401).send('Invalid email or password')
     }
@@ -48,11 +49,8 @@ sessionRouter.post('/', async (req, res) => {
     //create an refresh token
     //const refreshToken = signJwt({ ...user, session: session.id }, '30m')//15min
     //return access and refresh tokens
-    const loggedInuser = {
-        email: user.email,
-        name: user.name
-    }
-    const loggedInuserInjson = JSON.stringify(loggedInuser)
+
+    // const loggedInuserInjson = JSON.stringify(loggedInuser)
     res.cookie('accessToken', accessToken, {
         maxAge: 1800000,//30min
         httpOnly: true,
@@ -60,7 +58,7 @@ sessionRouter.post('/', async (req, res) => {
         //path: '/',
         //secure: false,  //for production set to the true
     })
-    res.cookie('user', loggedInuserInjson)
+    //res.cookie('user', loggedInuserInjson)
 
     // res.cookie('refreshToken', refreshToken, {
     //     maxAge: 1800000,//30min
@@ -71,12 +69,14 @@ sessionRouter.post('/', async (req, res) => {
     //     secure: false,  //for production set to the true
     // })
 
-    return res.send({ accessToken, user })
+    return res.send({ accessToken })
 
 })
 
-sessionRouter.delete('/:id', async (req, res) => {
+sessionRouter.delete('/:id', deserializeUser, async (req, res) => {
     const categoryId = Number(req.params.id)
+    //const categoryId = req.params.id
+    console.log(categoryId, 'categoryId')
 
     // const sessionId = res.locals.user.session
     // await updateSession(sessionId, { valid: false })
@@ -114,33 +114,34 @@ sessionRouter.delete('/:id', async (req, res) => {
 sessionRouter.get('/oauth/google', async (req, res) => {
     try {
         //get the code from query string
-        console.log(req, 'request call back')
+
         const code = req.query.code
         //get the id and access token with the code
         const { id_token, access_token } = await getGoogleOAuthTokens({ code })
-        console.log({ id_token, access_token })
+
         //get user with tokens
         const googleUser = await getGoogleUser({ id_token, access_token })
         //jwt.decode(id_token)
-        console.log({ googleUser })
+
         if (!googleUser.verified_email) {
             return res.status(403).send('Google account is not verified')
         }
         //upsert the user
 
         const user = await findCreateAndUpdateUser(googleUser)
-        console.log("user: ", user)
-        const loginUser = {
-            email: user.email,
-            name: user.name
-        }
-        const currentUser = JSON.stringify(loginUser)
+
+        // const loginUser = {
+        //     email: user.email,
+        //     name: user.name,
+        //     id: user.id
+        // }
+        // const currentUser = JSON.stringify(loginUser)
 
 
         //create sessions
         const session = await createSession(user.id)
 
-        console.log("sess: ", session)
+
 
         // create an access token
         const accessToken = signJwt({ ...user, session: session.id }, '5m')
@@ -155,7 +156,7 @@ sessionRouter.get('/oauth/google', async (req, res) => {
 
         res.cookie("accessToken", accessToken, accessTokenCookieOptions);
 
-        res.cookie("user", currentUser);
+        //res.cookie("user", currentUser);
         //res.send(user)
 
         //res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);

@@ -15,4 +15,24 @@ const addProductToCart = async (productId) => {
     return request.data
 }
 
-export default { getAll, addProductToCart }
+const getCart = async () => {
+    const request = await axios.get(`${baseUrl}/cart`)
+    return request.data
+}
+
+const remove = async (id) => {
+
+    const request = await axios.delete(`${baseUrl}/cart/${id}`, {
+        withCredentials: true,
+    })
+    return request.data
+}
+
+const reform = async (id, object) => {
+    const request = await axios.put(`${baseUrl}/cart/${id}`, object, {
+        withCredentials: true,
+    })
+    return request.data
+}
+
+export default { getAll, addProductToCart, getCart, remove, reform }

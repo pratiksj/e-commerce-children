@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import userService from '../services/user'
+import cartService from '../services/products'
+
+
 
 
 
@@ -12,45 +15,131 @@ const userSlice = createSlice({
         },
         setUser(state, action) {
             return action.payload
+        },
+        appendCart(state, action) {
+            if (state.id === action.payload.user_id) {
+                return {
+                    ...state,
+                    cartItems: [...state.cartItems, action.payload]
+                }
+            }
+            return state
+
+
+        },
+        deleteCart(state, action) {
+            const deleteCart = {
+                ...state,
+                cartItems: state.cartItems.filter((cart) => cart.id !== action.payload.id)
+            }
+
+            return deleteCart
+        },
+        increase(state, action) {
+            const updatecart = {
+                ...state,
+                cartItems: state.cartItems.map((cart) => cart.id === action.payload.id ? action.payload : cart)
+            }
+            return updatecart
+
+        },
+        decrease(state, action) {
+            const decreaseCart = {
+                ...state,
+                cartItems: state.cartItems.map((cart) => cart.id === action.payload.id ? action.payload : cart)
+            }
+            return decreaseCart
+
         }
 
     }
 })
 
 
-export const { appendUser, setUser } = userSlice.actions
+export const { appendUser, setUser, appendCart, deleteCart, decrease, increase } = userSlice.actions
 export default userSlice.reducer
 
 export const creatUser = (user) => {
 
     return async () => {
-        const newUser = await userService.create(user)
-        console.log(newUser, 'from database')
+        await userService.create(user)
+
     }
 }
 
 export const loginUser = (credential) => {
     return async (dispatch) => {
         const currentUser = await userService.login(credential)
-        dispatch(setUser(currentUser.user))
+
+        dispatch(setUser(currentUser.currentUser))
 
     };
 };
 
-export const fromGoogle = (userFromGoogle) => {
-    return async (dispatch) => {
-        dispatch(setUser(userFromGoogle))
+export const joinCart = (productId) => {
+    return async dispatch => {
+
+        const product = await cartService.addProductToCart(productId)
+
+
+        dispatch(appendCart(product))
+
     }
 }
 
-// export const currentUser = () => {
-//     return async (dispatch) => {
-//         console.log('hellow')
-//         const loginUser = await userService.getloggedInUser()
-//         console.log(loginUser, 'currentUser')
-//         dispatch(setUser(loginUser));
-//     }
-// }
+export const increaseQuantity = (obj) => {
+    return async dispatch => {
+
+        const newQuantity = {
+            ...obj,
+            quantity: obj.quantity + 1
+        }
+
+        const updatedObj = await cartService.reform(obj.id, newQuantity)
+
+        dispatch(increase(updatedObj))
+
+    }
+}
+
+export const minusQuantity = (obj) => {
+    return async dispatch => {
+
+        const updatedQuality = obj.quantity - 1
+
+        const newQuantity = {
+            ...obj,
+            quantity: updatedQuality
+        }
+
+
+        const updatedObj = await cartService.reform(obj.id, newQuantity)
+
+
+        dispatch(decrease(updatedObj))
+
+    }
+}
+
+
+
+export const removeCart = (id) => {
+    return async (dispatch) => {
+        const cartToDelete = await cartService.remove(id)
+
+        dispatch(deleteCart(cartToDelete))
+
+    }
+}
+
+export const currentUser = () => {
+    return async (dispatch) => {
+
+        const loginUser = await userService.getloggedInUser()
+
+        dispatch(setUser(loginUser));
+    }
+}
 
 
 

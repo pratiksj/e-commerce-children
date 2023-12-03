@@ -18,12 +18,16 @@ const validatePassword = async ({
     const user = await prisma.user.findUnique({
         where: {
             email: email
+        },
+        include: {
+            cartItems: true
         }
     })
 
     if (!user) {
         return false;
     }
+
     const passwordCorrect = user === null
         ? false
         : await bcrypt.compare(password, user.password)
@@ -86,6 +90,9 @@ const findCreateAndUpdateUser = async (userObj) => {
     const userExist = await prisma.user.findUnique({
         where: {
             email: userObj.email
+        },
+        include: {
+            cartItems: true
         }
     })
     if (!userExist) {
@@ -94,6 +101,9 @@ const findCreateAndUpdateUser = async (userObj) => {
                 name: userObj.name,
                 email: userObj.email,
 
+            },
+            include: {
+                cartItems: true
             }
         })
         return newUser

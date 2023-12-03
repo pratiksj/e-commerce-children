@@ -27,6 +27,7 @@ export const SignIn = () => {
       );
 
       reset();
+      //dispatch(currentUser());
       navigate("/");
     } catch (error) {
       console.log(error.message);
