@@ -43,7 +43,7 @@ const deserializeUser = async (req, res, next) => {
 
     const { decoded, expired } = verifyJwt(accessToken)
     if (decoded === null) {
-        return res.status(404)
+        return res.status(404).json({ error: 'this is error' })
     }
     const decodedUser = await prisma.user.findUnique({
         where: {
