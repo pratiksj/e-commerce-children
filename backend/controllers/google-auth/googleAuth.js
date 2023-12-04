@@ -69,7 +69,7 @@ sessionRouter.post('/', async (req, res) => {
     //     secure: false,  //for production set to the true
     // })
 
-    return res.send({ accessToken })
+    return res.send({ accessToken, user })
 
 })
 
