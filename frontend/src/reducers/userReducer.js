@@ -71,7 +71,8 @@ export const loginUser = (credential) => {
     return async (dispatch) => {
         const currentUser = await userService.login(credential)
 
-        dispatch(setUser(currentUser.currentUser))
+
+        dispatch(setUser(currentUser.user))
 
     };
 };

@@ -11,22 +11,17 @@ const create = async (newuser) => {
 const login = async (credential) => {
     const request = await axios.post(loginBaseUrl, credential)
 
-    const getLoggedInUser = await axios.get(getLoggedUserUrl, null, {
-        withCredentials: true,
-    })
-    const response = {
-        user: request.data,
-        currentUser: getLoggedInUser.data
-    }
-    return response
+    // const getLoggedInUser = await axios.get(getLoggedUserUrl, null, {
+    //     withCredentials: true,
+    // })
+    // const response = {
+    //     user: request.data,
+    //     currentUser: getLoggedInUser.data
+    // }
+    return request.data
 
 }
-// const remove = async (id) => {
-//     const request = await axios.delete(`${loginBaseUrl}/${id}`, {
-//         withCredentials: true,
-//     })
-//     return request.data
-// }
+
 
 const getloggedInUser = async () => {
     const request = await axios.get(getLoggedUserUrl, null, {
