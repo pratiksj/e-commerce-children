@@ -159,12 +159,30 @@ productRouter.delete('/cart/:id', deserializeUser, async (req, res) => {
 
 productRouter.put('/cart/:id', deserializeUser, async (req, res) => {
     const cartId = Number(req.params.id)
+    const updatedQuantity = Number(req.body.quantity)
+
     try {
+        const seekProduct = await prisma.cartItem.findUnique({
+            where: {
+                id: cartId
+            }
+        })
+        const findProduct = await prisma.product.findUnique({
+            where: {
+                product_id: seekProduct.product_id
+            }
+        })
+        const totalPrice = findProduct.price * updatedQuantity
+
         const updatedItem = await prisma.cartItem.update({
             where: { id: cartId },
-            data: { quantity: Number(req.body.quantity) }
+            data: {
+                quantity: updatedQuantity,
+                price: totalPrice
+            }
 
         })
+
         res.json(updatedItem)
 
 
