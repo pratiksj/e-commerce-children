@@ -19,29 +19,8 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProduct());
+
     dispatch(currentUser());
-    // const cookies = document.cookie.split(";");
-
-    // let loggedInuser = null;
-    // for (let i = 0; i < cookies.length; i++) {
-    //   const cookie = cookies[i];
-
-    //   if (cookie.startsWith("user=")) {
-    //     loggedInuser = cookie.substring("user=".length, cookie.length);
-    //     break;
-    //   }
-    // }
-    // if (loggedInuser) {
-    //   const decodedUrl = decodeURIComponent(loggedInuser);
-
-    //   const jsonObject = JSON.parse(decodedUrl);
-
-    //   //dispatch(fromGoogle(jsonObject));
-
-    //   //dispatch(getCart());
-    // }
-
-    // Access all cookies
   }, []);
 
   return (
