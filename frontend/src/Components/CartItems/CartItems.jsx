@@ -87,7 +87,7 @@ export const CartItems = () => {
                         +
                       </button>
                     </div>
-                    <p>Rs {}</p>
+                    <p>Rs {item ? item.price : 0}</p>
 
                     <FontAwesomeIcon
                       className="cartitems-remove-icon"
