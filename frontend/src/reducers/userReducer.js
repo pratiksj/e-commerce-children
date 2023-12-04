@@ -135,10 +135,16 @@ export const removeCart = (id) => {
 
 export const currentUser = () => {
     return async (dispatch) => {
+        try {
+            const loginUser = await userService.getloggedInUser()
 
-        const loginUser = await userService.getloggedInUser()
+            dispatch(setUser(loginUser));
 
-        dispatch(setUser(loginUser));
+        } catch (error) {
+            console.log('we in the catch block', error.response.data.error)
+        }
+
+
     }
 }
 
