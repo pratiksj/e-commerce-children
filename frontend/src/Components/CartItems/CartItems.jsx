@@ -5,37 +5,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { Model } from "../Model/Model";
 
 import {
   increaseQuantity,
   minusQuantity,
   removeCart,
 } from "../../reducers/userReducer";
+import { useState } from "react";
 export const CartItems = () => {
+  const [modal, setModal] = useState(false);
+
+  const handleOpenModel = () => {
+    setModal(true);
+  };
+  const handleCloseModel = () => {
+    setModal(false);
+  };
+
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
 
   const cartItem = useSelector((state) => state.user);
-  //const quantity= useSelector((state)=>state.user.cartItems)
 
   const getProductDetails = (productId) => {
     return products.find((product) => product.product_id === productId);
   };
-  //const [quantity, setQuantity] = useState({});
-
-  // const updateQuantity = (productId, newQuantity) => {
-
-  //   setQuantity((prevQuantities) => ({
-  //     ...prevQuantities,
-  //     [productId]: newQuantity > 1 ? newQuantity : 1,
-  //   }));
-  // };
 
   const updateQuantity = (obj) => {
     dispatch(increaseQuantity(obj));
   };
   const decreaseQuantity = (obj) => {
-    console.log(obj, "from decrease");
     dispatch(minusQuantity(obj));
   };
   const removeFromCart = (id) => {
@@ -57,8 +57,6 @@ export const CartItems = () => {
         ? null
         : cartItem.cartItems.map((item) => {
             const product = getProductDetails(item.product_id);
-            console.log(item, "het");
-            //const quantity = quantities[item.product_id];
 
             if (product) {
               return (
@@ -71,7 +69,7 @@ export const CartItems = () => {
                     />
                     <p>{product.name}</p>
                     <p>Rs{product.price}</p>
-                    {/* <button className="cartitem-quantity">{}</button> */}
+
                     <div className="cartitem-quantity-display">
                       <button
                         className="quantity-btn"
@@ -122,7 +120,14 @@ export const CartItems = () => {
               {/* <h3>Rs {getTotalCartAmount()}</h3> */}
             </div>
           </div>
-          <button>PROCEED TO CHECKOUT</button>
+          <button onClick={handleOpenModel}>PROCEED TO CHECKOUT</button>
+          {modal && (
+            <Model
+              //isModelOpen={modal}
+              onClose={handleCloseModel}
+              // onSubmit={handleModalSubmit}
+            />
+          )}
         </div>
         <div className="cartitems-promocode">
           <p>If you have a promo code,Enter it her</p>
