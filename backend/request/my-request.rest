@@ -14,6 +14,21 @@ Content-Type: application/json
    
    
 }
+
+###
+PUT  http://localhost:3001/api/manual-register/
+Content-Type: application/json
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsImVtYWlsIjoiY3VycmVudEBnbWFpbC5jb20iLCJuYW1lIjoiY3VycmVudCIsInBhc3N3b3JkIjoiJDJhJDEwJE8yMmtwc2pyNDV1Q1dzYmhSUGM5eU9tZjR0L2tVdklSZVRtUkxVVjQyaHFRblYuTXJJZEhXIiwiYWRkcmVzcyI6ImthdGhtYW5kdSIsImNvbnRhY3QiOiIxMjMtOTg3NyIsImNhcnRJdGVtcyI6W3siaWQiOjExNCwidXNlcl9pZCI6MjAsInByb2R1Y3RfaWQiOjUsInF1YW50aXR5Ijo0LCJwcmljZSI6NjgwLCJ0aW1lc3RhbXAiOiIyMDIzLTEyLTAzVDE5OjQ4OjUwLjc3NVoifSx7ImlkIjoxMTUsInVzZXJfaWQiOjIwLCJwcm9kdWN0X2lkIjozLCJxdWFudGl0eSI6MiwicHJpY2UiOjQwMCwidGltZXN0YW1wIjoiMjAyMy0xMi0wM1QyMDoxMjo0Mi43MjBaIn1dLCJzZXNzaW9uIjoxNzAsImlhdCI6MTcwMjE0MTg2MywiZXhwIjoxNzAyMTQzNjYzfQ.juBtmsuOwV07rLLFDRNIe-QVKR8Q-zmYbK-iLevOPAo
+
+{
+  
+   
+   "name":"current",
+   "address":"kapan",
+   "contact":"123-9877"
+   
+   
+}
 ###
 DELETE http://localhost:3001/api/manual-register/13
 

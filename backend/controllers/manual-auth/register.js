@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const registerRouter = require('express').Router()
 const { PrismaClient } = require('@prisma/client')
+const { deserializeUser } = require('../../utils/middleware')
 const prisma = new PrismaClient()
 
 
@@ -65,5 +66,49 @@ registerRouter.delete('/:id', async (req, res) => {
         console.log(error)
     }
 })
+
+registerRouter.put('/', deserializeUser, async (req, res) => {
+
+    try {
+        const { name, address, contact } = req.body
+        const userId = res.locals.user.id
+
+        let user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        })
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' })
+        }
+        if (name) {
+            user = await prisma.user.update({
+                where: { id: userId },
+                data: { name: name },
+            })
+        }
+        if (address) {
+            user = await prisma.user.update({
+                where: { id: userId },
+                data: { address: address },
+            })
+        }
+        if (contact) {
+            user = await prisma.user.update({
+                where: { id: userId },
+                data: { contact: contact },
+            })
+        }
+
+        res.status(200).json({ message: 'User information updated successfully', user: user })
+
+    } catch (error) {
+        res.status(400).json({ error: 'Internal server error' })
+    }
+
+
+})
+
 
 module.exports = registerRouter

@@ -27,6 +27,15 @@ export const CartItems = () => {
   const products = useSelector((state) => state.products);
 
   const cartItem = useSelector((state) => state.user);
+  console.log(cartItem, "from cartItems component");
+  const subTotal =
+    cartItem === null || cartItem.cartItems === undefined
+      ? null
+      : cartItem.cartItems.reduce(
+          (accumulator, currentVal) => accumulator + currentVal.price,
+          0
+        );
+  console.log(subTotal, "subtotal");
 
   const getProductDetails = (productId) => {
     return products.find((product) => product.product_id === productId);
@@ -107,7 +116,7 @@ export const CartItems = () => {
           <div>
             <div className="cartitems-total-items">
               <p>Subtotal</p>
-              {/* <p>Rs {getTotalCartAmount()}</p> */}
+              <p>Rs{subTotal}</p>
             </div>
             <hr />
             <div className="cartitems-total-items">
@@ -117,17 +126,11 @@ export const CartItems = () => {
             <hr />
             <div className="cartitems-total-items">
               <h3>Total</h3>
-              {/* <h3>Rs {getTotalCartAmount()}</h3> */}
+              <h3>Rs {subTotal}</h3>
             </div>
           </div>
           <button onClick={handleOpenModel}>PROCEED TO CHECKOUT</button>
-          {modal && (
-            <Model
-              //isModelOpen={modal}
-              onClose={handleCloseModel}
-              // onSubmit={handleModalSubmit}
-            />
-          )}
+          {modal && <Model onClose={handleCloseModel} />}
         </div>
         <div className="cartitems-promocode">
           <p>If you have a promo code,Enter it her</p>

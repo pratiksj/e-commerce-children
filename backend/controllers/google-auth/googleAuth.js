@@ -76,7 +76,7 @@ sessionRouter.post('/', async (req, res) => {
 sessionRouter.delete('/:id', deserializeUser, async (req, res) => {
     const categoryId = Number(req.params.id)
     //const categoryId = req.params.id
-    console.log(categoryId, 'categoryId')
+
 
     // const sessionId = res.locals.user.session
     // await updateSession(sessionId, { valid: false })

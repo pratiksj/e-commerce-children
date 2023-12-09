@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import "./Model.css";
 
 export const Model = ({ onClose }) => {
@@ -8,9 +9,11 @@ export const Model = ({ onClose }) => {
       document.body.style.overflow = "scroll";
     };
   }, []);
-  const [address, setAddress] = useState("");
-  const [contact, setContact] = useState("");
-  const [name, setName] = useState("");
+  const user = useSelector((state) => state.user);
+
+  const [address, setAddress] = useState(user ? user.address : "");
+  const [contact, setContact] = useState(user ? user.contact : "");
+  const [name, setName] = useState(user ? user.name : "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,7 +51,7 @@ export const Model = ({ onClose }) => {
               Contact:
               <input
                 type="text"
-                value={address}
+                value={contact}
                 onChange={(e) => setContact(e.target.value)}
               />
             </label>
