@@ -19,7 +19,14 @@ productRouter.get('/', async (req, res) => {
                 category: true,
                 comments: {
                     select: {
-                        comment_text: true
+                        comment_text: true,
+                        comment_id: true,
+                        user: {
+                            select: {
+                                name: true
+                            }
+                        }
+
                     }
                 },
                 cartItems: true

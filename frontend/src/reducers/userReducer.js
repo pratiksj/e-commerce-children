@@ -141,10 +141,21 @@ export const currentUser = () => {
             dispatch(setUser(loginUser));
 
         } catch (error) {
-            console.log('we in the catch block', error.response.data.error)
+            console.log(error.response.data.error)
         }
 
 
+    }
+}
+
+export const updateUser = (update) => {
+    return async (dispatch) => {
+        try {
+            const userToUpdate = await userService.update(update)
+            console.log(userToUpdate, 'from thunk')
+        } catch (error) {
+            console.log(error.response.data.error)
+        }
     }
 }
 

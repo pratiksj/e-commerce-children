@@ -11,13 +11,6 @@ const create = async (newuser) => {
 const login = async (credential) => {
     const request = await axios.post(loginBaseUrl, credential)
 
-    // const getLoggedInUser = await axios.get(getLoggedUserUrl, null, {
-    //     withCredentials: true,
-    // })
-    // const response = {
-    //     user: request.data,
-    //     currentUser: getLoggedInUser.data
-    // }
     return request.data
 
 }
@@ -31,4 +24,11 @@ const getloggedInUser = async () => {
     return request.data
 }
 
-export default { create, login, getloggedInUser }
+const update = async (objToUpdate) => {
+    const request = await axios.put(baseUrl, objToUpdate, {
+        withCredentials: true
+    })
+    return request.data
+}
+
+export default { create, login, getloggedInUser, update }

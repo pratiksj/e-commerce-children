@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./Model.css";
+import { updateUser } from "../../reducers/userReducer";
 
 export const Model = ({ onClose }) => {
   useEffect(() => {
@@ -9,6 +10,7 @@ export const Model = ({ onClose }) => {
       document.body.style.overflow = "scroll";
     };
   }, []);
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const [address, setAddress] = useState(user ? user.address : "");
@@ -17,7 +19,9 @@ export const Model = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("from Model component");
+
+    dispatch(updateUser({ name, address, contact }));
+
     //onSubmit({ address, contact });
   };
 

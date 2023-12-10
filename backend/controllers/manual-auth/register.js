@@ -70,8 +70,10 @@ registerRouter.delete('/:id', async (req, res) => {
 registerRouter.put('/', deserializeUser, async (req, res) => {
 
     try {
+        console.log(req.body, 'from api')
         const { name, address, contact } = req.body
         const userId = res.locals.user.id
+        console.log(userId, 'userId from token')
 
         let user = await prisma.user.findUnique({
             where: {
