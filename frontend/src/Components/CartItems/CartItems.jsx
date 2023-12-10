@@ -27,7 +27,7 @@ export const CartItems = () => {
   const products = useSelector((state) => state.products);
 
   const cartItem = useSelector((state) => state.user);
-  console.log(cartItem, "from cartItems component");
+
   const subTotal =
     cartItem === null || cartItem.cartItems === undefined
       ? null
@@ -35,7 +35,6 @@ export const CartItems = () => {
           (accumulator, currentVal) => accumulator + currentVal.price,
           0
         );
-  console.log(subTotal, "subtotal");
 
   const getProductDetails = (productId) => {
     return products.find((product) => product.product_id === productId);

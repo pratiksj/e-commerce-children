@@ -99,7 +99,15 @@ productRouter.post('/comment/:id', deserializeUser, async (req, res) => {
                 comment_text
             }
         })
-        res.status(201).json(newComment)
+
+        const response = {
+            comment_text: newComment.comment_text,
+            comment_id: newComment.comment_id,
+            user: {
+                name: user.name
+            }
+        }
+        res.status(201).json(response)
 
     } catch (error) {
         res.status(500).json({ error: "Error in Internal server" })

@@ -1,6 +1,5 @@
 import axios from "axios";
 const baseUrl = '/api/products'
-//const cartUrl = '/api/products/cart'
 
 const getAll = async () => {
     const request = await axios.get(baseUrl)
@@ -35,4 +34,11 @@ const reform = async (id, object) => {
     return request.data
 }
 
-export default { getAll, addProductToCart, getCart, remove, reform }
+const addComment = async (id, comment) => {
+    const request = await axios.post(`${baseUrl}/comment/${id}`, comment, {
+        withCredentials: true,
+    })
+    return request.data
+}
+
+export default { getAll, addProductToCart, getCart, remove, reform, addComment }

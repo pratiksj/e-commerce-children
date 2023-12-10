@@ -1,35 +1,22 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import "./DescriptionsBox.css";
+import { newComment } from "../../reducers/productReducer";
 
 export const DescriptionsBox = (props) => {
-  console.log(props, "from  props ");
+  const dispatch = useDispatch();
   const [showDescription, setShowDescription] = useState(true);
-  const [newComment, setNewComment] = useState("");
-  // const comments = [
-  //   { username: "User1", comment: "This product is amazing!" },
-  //   { username: "User2", comment: "very nice ." },
-  //   { username: "User3", comment: "my kids really like it." },
-  //   { username: "User4", comment: "love it." },
-  //   { username: "User5", comment: "love it." },
-  //   { username: "User6", comment: "love it." },
-  //   { username: "User7", comment: "love it." },
-  //   { username: "User7", comment: "love it." },
-  //   { username: "User9", comment: "love it." },
-  //   { username: "User10", comment: "love it." },
-  //   { username: "User10", comment: "love it." },
-  //   { username: "User10", comment: "love it." },
-  //   { username: "User10", comment: "love it." },
-  //   // Add more comments as needed...
-  // ];
+  const [addComment, setaddComment] = useState("");
+
   const handleInputChange = (event) => {
-    setNewComment(event.target.value);
+    setaddComment(event.target.value);
   };
 
-  const handleAddcomment = () => {
-    console.log("from handleAddcomment");
+  const handleAddcomment = (object) => {
+    dispatch(newComment(object.product_id, { comment_text: addComment }));
+    setaddComment("");
   };
   const handleTabClick = (tab) => {
-    console.log(tab, "tab");
     if (tab === "description") {
       setShowDescription(true);
     } else if (tab === "reviews") {
@@ -72,20 +59,16 @@ export const DescriptionsBox = (props) => {
                     {comment.comment_text}
                   </div>
                 ))}
-                {/* {comments.map((comment, index) => (
-                  <div key={index} className="comment">
-                    <strong>{comment.username}: </strong>
-                    {comment.comment}
-                  </div>
-                ))} */}
               </div>
               <div className="add-comment">
                 <input
                   type="text"
-                  value={newComment}
+                  value={addComment}
                   onChange={handleInputChange}
                 />
-                <button onClick={handleAddcomment}>Add comment</button>
+                <button onClick={() => handleAddcomment(props.product)}>
+                  Add comment
+                </button>
               </div>
             </div>
           </div>
