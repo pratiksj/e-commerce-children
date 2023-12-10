@@ -74,18 +74,19 @@ productRouter.post('/', async (req, res) => {
 
 })
 
-productRouter.post('/comment', async (req, res) => {
+productRouter.post('/comment/:id', deserializeUser, async (req, res) => {
 
     try {
-        const { user_id, product_id, comment_text } = req.body
-        const user = await prisma.user.findUnique({
-            where: {
-                id: user_id
-            }
-        })
+
+        const user = res.locals.user
+        const productId = parseInt(req.params.id)
+
+
+        const { comment_text } = req.body
+
         const product = await prisma.product.findUnique({
             where: {
-                product_id: product_id
+                product_id: productId
             }
         })
         if (!user || !product) {
@@ -93,8 +94,8 @@ productRouter.post('/comment', async (req, res) => {
         }
         const newComment = await prisma.comment.create({
             data: {
-                user_id,
-                product_id,
+                user_id: user.id,
+                product_id: productId,
                 comment_text
             }
         })
